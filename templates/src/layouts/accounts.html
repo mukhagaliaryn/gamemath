@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="container mx-auto py-10 grid gap-10">
+    <div class="flex justify-center">
+        <a href="{% url 'home' %}" class="flex">
+            <img src="{% static '/images/logo.png' %}" class="w-96" alt="">
+        </a>
+    </div>
+    <div class="">
+        {% block layout_content %}
+        {% endblock layout_content %}
+    </div>
+</div>
+{% endblock content %}

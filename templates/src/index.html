@@ -1,0 +1,97 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+{% block title %}
+    Басқару панелі | GameMath
+{% endblock title %}
+
+
+{% block main_content %}
+<div class="container grid gap-10">
+    <div
+        class="w-full flex justify-between shadow border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+        <div class="flex flex-col p-10 text-center">
+            <img class="w-48 h-48 mb-3 rounded-full shadow-lg"
+                src="{% if user.profile.avatar %}{{ user_profile.avatar.url }}{% else %}{% static '/images/user-default.jpg'%}{% endif %}"
+                alt="Bonnie image" />
+            <h2 class="text-4xl font-bold dark:text-white">{{ user_profile.full_name }}</h2>
+            <span class="text-white text-xl dark:text-gray-400">{{ user_profile.username }}</span>
+            <a href="#" class="font-medium text-xl text-white underline">
+                {{ user_profile.email }}
+            </a>
+        </div>
+
+        <div class="flex-1 p-10">
+            <h5 class="mb-2 text-4xl font-semibold tracking-tight text-white">
+                Жалпы статистика
+            </h5>
+            <div class=" flex flex-col gap-4 ">
+                <div class="w-full bg-white rounded-full dark:bg-gray-700">
+                    <div class="bg-orange-500 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full"
+                        style="width: 45%">Цифрлық сауатылық 45%</div>
+                </div>
+
+                <div class="w-full bg-white rounded-full dark:bg-gray-700">
+                    <div class="bg-orange-500 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full"
+                        style="width: 34%">Сыни ойлау 34%</div>
+                </div>
+
+                <div class="w-full bg-white rounded-full dark:bg-gray-700">
+                    <div class="bg-orange-500 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full"
+                        style="width: 27%">Логика 27%</div>
+                </div>
+
+                <div class="w-full bg-white rounded-full dark:bg-gray-700">
+                    <div class="bg-orange-500 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full"
+                        style="width: 15%">Шеберлік 5%</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% if courses_with_progress %}
+    <div class="grid grid-cols-4 gap-2">
+        {% for course_progress in courses_with_progress %}
+        <a href="{% url 'course_detail' course_progress.course.id %}"
+            class="w-full bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 transition-all hover:bg-gray-100">
+            <img class="rounded-t-lg"
+                src="{% if u_course.course.poster %}{{ u_course.course.poster.url }}{% else %}{% static '/images/poster.jpg' %}{% endif %}"
+                alt="" />
+
+            <div class="p-5">
+                <h5 class="mb-2 text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
+                    {{ course_progress.course.title }}
+                </h5>
+                <p class="mb-2 text-gray-500">{{ course_progress.course.category }}</p>
+                <div class="flex justify-between items-center">
+                    <p class="mt-2 text-sm text-gray-600">
+                        {% if course_progress.completed %}
+                        <span class="text-green-500">Аяқталды</span>
+                        {% else %}
+                        <span class="text-yellow-500">Процессте</span>
+                        {% endif %}
+                    </p>
+                    <span class="block text-gray-500 text-sm">
+                        Өтілген курстар саны:
+                        {{ course_progress.completed_lessons }}/{{ course_progress.total_lessons }}
+                    </span>
+                </div>
+                <span class="block text-gray-500">{{ u_course.course.category.name }}</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="max-w-xl w-full mx-auto flex flex-col items-center gap-2">
+        <svg class="w-48 h-48 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd"
+                d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm5.757-1a1 1 0 1 0 0 2h8.486a1 1 0 1 0 0-2H7.757Z"
+                clip-rule="evenodd" />
+        </svg>
+
+        <span class="text-white text-xl">Сіз әлі бірде бір курсты қосқан жоқсыз!</span>
+    </div>
+    {% endif %}
+</div>
+{% endblock main_content %}

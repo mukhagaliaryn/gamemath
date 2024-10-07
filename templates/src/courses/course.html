@@ -1,0 +1,94 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+{% block title %}
+{{ course.title }} | CreativeWEB
+{% endblock title %}
+
+
+{% block main_content %}
+<div class="grid grid-cols-2 overflow-auto">
+    <div class="w-full">
+        <img class="rounded-t-lg w-full"
+            src="{% if course.poster %}{{ course.poster.url }}{% else %}{% static '/images/poster.jpg' %}{% endif %}"
+            alt="" />
+    </div>
+
+    <div class="px-10">
+        <div class="pb-10 grid gap-4">
+            <div class="flex gap-2 items-start">
+                <svg class="w-12 h-12 text-gray-800 dark:text-white" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M7.833 2c-.507 0-.98.216-1.318.576A1.92 1.92 0 0 0 6 3.89V21a1 1 0 0 0 1.625.78L12 18.28l4.375 3.5A1 1 0 0 0 18 21V3.889c0-.481-.178-.954-.515-1.313A1.808 1.808 0 0 0 16.167 2H7.833Z" />
+                </svg>
+                <div class="grid gap-2">
+                    <h1 class="text-5xl font-extrabold dark:text-white">{{ course.title }}</h1>
+                    <span class="text-gray-500 block">{{ course.description }}</span>
+
+                    <div class="flex gap-2">
+                        <div class="flex items-center text-gray-500">
+                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd"
+                                    d="M4 4a2 2 0 0 0-2 2v12a2 2 0 0 0 .087.586l2.977-7.937A1 1 0 0 1 6 10h12V9a2 2 0 0 0-2-2h-4.532l-1.9-2.28A2 2 0 0 0 8.032 4H4Zm2.693 8H6.5l-3 8H18l3-8H6.693Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span>{{ course.lessons.count }} сабақ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" action="{% url 'start_or_continue_course' course.pk %}">
+                {% csrf_token %}
+                {% if action_button.type == "start" %}
+                    <button 
+                        type="submit" 
+                        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    >
+                        {{ action_button.label }}       
+                    </button>
+                {% elif action_button.type == "continue" %}
+                    <a 
+                        href="{% url 'lesson_detail' first_lesson.pk %}" 
+                        class="w-full block text-center py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                    >
+                        {{ action_button.label }} 
+                    </a>
+                {% else %}
+                    <div class="flex gap-2 items-center text-green-500">
+                        <svg class="w-6 h-6 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="block">Курс аяқталды!</span>
+                    </div>
+                {% endif %}
+            </form>
+            {% if all_lessons_completed and not course_progress.completed %}
+                <form method="post" action="{% url 'complete_course' course.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded mt-6">Курсты аяқтау</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <div class="grid gap-4">
+            {% for lesson in course.lessons.all %}
+            <div class="px-10 py-5 border rounded-lg flex gap-4">
+                <svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
+                        d="M4 4a2 2 0 0 0-2 2v12a2 2 0 0 0 .087.586l2.977-7.937A1 1 0 0 1 6 10h12V9a2 2 0 0 0-2-2h-4.532l-1.9-2.28A2 2 0 0 0 8.032 4H4Zm2.693 8H6.5l-3 8H18l3-8H6.693Z"
+                        clip-rule="evenodd" />
+                </svg>
+                <div>
+                    <h5 class="text-xl font-semibold dark:text-white">{{ lesson.title }}</h5>
+                    <span class="text-gray-500 block">{{ lesson.updated_at }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

@@ -1,0 +1,32 @@
+{% extends 'layouts/accounts.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    Авторизация | GameMath
+{% endblock title %}
+
+
+{% block layout_content %}
+<div class="max-w-screen-sm mx-auto grid gap-5">
+    <h3 class="text-4xl font-bold text-center">Математика пәніне арналған шағын портал</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <button 
+            type="submit" 
+            class="w-full text-white mt-4 bg-orange-500 transition-all hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-xl px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 focus:outline-none"
+        >
+            Жүйеге кіру
+        </button>
+    </form>
+    <div>
+        <a 
+            href="{% url 'signup' %}" 
+            class="py-2.5 px-5 mb-2 block w-full text-center text-xl font-medium text-black focus:outline-none bg-white rounded-lg transition-all hover:bg-gray-100 hover:text-orange-500 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+        >
+            Регистрация
+        </a>
+    </div>
+</div>
+{% endblock layout_content %}

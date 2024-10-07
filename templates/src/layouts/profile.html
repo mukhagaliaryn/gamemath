@@ -1,0 +1,47 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+
+{% block main_content %}
+<div>
+    <div class="flex gap-10">
+        <!-- Sidebar -->
+        <aside class="h-full hidden lg:block" aria-label="Sidebar">
+            <div class="overflow-y-auto p-2 bg-white border-gray-200 h-full">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="{% url 'profile' %}"
+                            class="flex items-center py-2 px-4 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-200 {% if request.path == '/accounts/profile/' %}bg-gray-200 dark:bg-gray-700{% endif %}">
+                            <span>Профиль</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'edit_profile' %}"
+                            class="flex items-center py-2 px-4 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-200 {% if request.path == '/accounts/profile/edit/' %}bg-gray-200 dark:bg-gray-700{% endif %}">
+                            <span>Профильді өңдеу</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'password_change' %}"
+                            class="flex items-center py-2 px-4 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-200 {% if request.path == '/accounts/profile/password_change/' %}bg-gray-200 dark:bg-gray-700{% endif %}">
+                            <span>Құпия сөзді өзгерту</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'delete_profile' %}"
+                            class="flex items-center py-2 px-4 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-200 {% if request.path == '/accounts/profile/delete/' %}bg-gray-200 dark:bg-gray-700{% endif %}">
+                            <span>Профильді жою</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <div class="flex-grow">
+            {% block profile_content %}
+            {% endblock profile_content %}
+        </div>
+    </div>
+</div>
+{% endblock main_content %}
