@@ -3,33 +3,69 @@
 
 
 {% block main_content %}
+<style>
+    form #div_id_email label {
+        font-size: 20px;
+        color: white;
+    }
+
+    form #div_id_full_name label {
+        font-size: 20px;
+        color: white;
+    }
+
+    form #div_id_old_password label {
+        font-size: 20px;
+        color: white;
+    }
+
+    form #div_id_new_password1 label {
+        font-size: 20px;
+        color: white;
+    }
+
+    form #div_id_new_password1 #id_new_password1_helptext {
+        font-size: 16px;
+        color: white;
+    }
+
+    form #div_id_new_password2 label {
+        font-size: 20px;
+        color: white;
+    }
+
+    form #div_id_new_password2 #id_new_password2_helptext {
+        font-size: 16px;
+        color: white;
+    }
+</style>
 <div>
-    <div class="flex gap-10">
+    <div class="flex gap-6">
         <!-- Sidebar -->
-        <aside class="h-full hidden lg:block" aria-label="Sidebar">
-            <div class="overflow-y-auto p-2 bg-white border-gray-200 h-full">
+        <aside class="h-full hidden lg:block sticky top-16" aria-label="Sidebar">
+            <div class="overflow-y-auto p-2 border-gray-200 h-full">
                 <ul class="space-y-2">
                     <li>
                         <a href="{% url 'profile' %}"
-                            class="flex items-center py-2 px-4 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-200 {% if request.path == '/accounts/profile/' %}bg-gray-200 dark:bg-gray-700{% endif %}">
+                            class="flex items-center py-2 px-4 text-xl font-normal text-white rounded-lg hover:bg-orange-400 {% if request.path == '/accounts/profile/' %}bg-orange-500{% endif %}">
                             <span>Профиль</span>
                         </a>
                     </li>
                     <li>
                         <a href="{% url 'edit_profile' %}"
-                            class="flex items-center py-2 px-4 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-200 {% if request.path == '/accounts/profile/edit/' %}bg-gray-200 dark:bg-gray-700{% endif %}">
+                            class="flex items-center py-2 px-4 text-xl font-normal text-white rounded-lg hover:bg-orange-400 {% if request.path == '/accounts/profile/edit/' %}bg-orange-500{% endif %}">
                             <span>Профильді өңдеу</span>
                         </a>
                     </li>
                     <li>
                         <a href="{% url 'password_change' %}"
-                            class="flex items-center py-2 px-4 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-200 {% if request.path == '/accounts/profile/password_change/' %}bg-gray-200 dark:bg-gray-700{% endif %}">
+                            class="flex items-center py-2 px-4 text-xl font-normal text-white rounded-lg hover:bg-orange-400 {% if request.path == '/accounts/profile/password_change/' %}bg-orange-500{% endif %}">
                             <span>Құпия сөзді өзгерту</span>
                         </a>
                     </li>
                     <li>
                         <a href="{% url 'delete_profile' %}"
-                            class="flex items-center py-2 px-4 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-200 {% if request.path == '/accounts/profile/delete/' %}bg-gray-200 dark:bg-gray-700{% endif %}">
+                            class="flex items-center py-2 px-4 text-xl font-normal text-white rounded-lg hover:bg-orange-400 {% if request.path == '/accounts/profile/delete/' %}bg-orange-500{% endif %}">
                             <span>Профильді жою</span>
                         </a>
                     </li>

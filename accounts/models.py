@@ -32,9 +32,14 @@ class UserManager(BaseUserManager):
 # User
 # ----------------------------------------------------------------------------------------------------------------------
 class User(AbstractBaseUser, PermissionsMixin):
+    ACCOUNT_TYPE = (
+        ('STUDENT', _('Student')),
+        ('TEACHER', _('Teacher')),
+    )
     email = models.EmailField(_('email'), max_length=128, unique=True)
     username = models.CharField(_('username'), max_length=128, unique=True)
     full_name = models.CharField(_('Full name'), max_length=128)
+    account_type = models.CharField(_('Account type'), choices=ACCOUNT_TYPE, default='STUDENT', max_length=128)
     avatar = models.ImageField(_('Avatar'), upload_to='accounts/users/', blank=True, null=True)
     is_staff = models.BooleanField(
         verbose_name=_("staff status"), default=False,

@@ -9,7 +9,7 @@
 
 {% block layout_content %}
 <div class="max-w-screen-sm mx-auto grid gap-5">
-    <h3 class="text-4xl font-bold text-center">Математика пәніне арналған шағын портал</h3>
+    <h3 class="text-4xl font-bold text-center">Математика пәніне арналған платформа</h3>
     <form method="post">
         {% csrf_token %}
         {{ form | crispy }}
@@ -23,7 +23,7 @@
     <div>
         <a 
             href="{% url 'signup' %}" 
-            class="py-2.5 px-5 mb-2 block w-full text-center text-xl font-medium text-black focus:outline-none bg-white rounded-lg transition-all hover:bg-gray-100 hover:text-orange-500 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            class="py-2.5 px-5 mb-2 block w-full text-center text-xl font-medium text-black focus:outline-none bg-white rounded-lg transition-all hover:bg-gray-100 hover:text-orange-500 focus:z-10 focus:ring-4 focus:ring-gray-100"
         >
             Регистрация
         </a>

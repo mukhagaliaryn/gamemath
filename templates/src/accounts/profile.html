@@ -13,7 +13,7 @@
         <ul class="messages">
             {% for message in messages %}
             <li class="">
-                <div class="alert {{ message.tags }} flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                <div class="alert {{ message.tags }} flex items-center p-4 mb-4 text-base text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
                     role="alert">
                     <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor" viewBox="0 0 20 20">
@@ -30,26 +30,44 @@
         {% endif %}
     </div>
 
-    <div class="w-full block bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+    <div class="w-full block bg-orange-500 rounded-lg">
         <div class="flex flex-col items-center p-10">
-            <img class="w-48 h-48 mb-3 rounded-full shadow-lg" src="{% if user.profile.avatar %}{{ user_profile.avatar.url }}{% else %}{% static '/images/user-default.jpg'%}{% endif %}" alt="Bonnie image" />
-            <h2 class="text-4xl font-bold dark:text-white">{{ user_profile.full_name }}</h2>
-            <span class="text-gray-500 dark:text-gray-400">{{ user_profile.username }}</span>
-            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+            <img class="w-48 h-48 mb-3 rounded-full shadow-lg" src="{% if user.profile.avatar %}{{ user_profile.avatar.url }}{% else %}{% static '/images/user.png'%}{% endif %}" alt="Bonnie image" />
+            <h2 class="text-4xl font-bold">{{ user_profile.full_name }}</h2>
+            <span class="text-xl">{{ user_profile.username }}</span>
+            <a href="#" class="font-medium text-xl underline">
                 {{ user_profile.email }}
             </a>
             <div class="flex mt-4 md:mt-6">
                 <a href="{% url 'home' %}"
-                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    Басқару панеліне өту
+                    class="inline-flex items-center px-4 py-2 text-xl font-medium text-center text-orange-500 bg-white rounded-lg transition-all hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200">
+                    Басты бетке өту
                 </a>
                 <a href="{% url 'edit_profile' %}"
-                    class="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                    Өзгеріс жасау
+                    class="py-2 px-4 ms-2 text-xl font-medium transition-all text-white hover:underline">
+                    Профилде өзгеріс жасау
                 </a>
             </div>
         </div>
     </div>
 
+
+    <div class="max-w-screen-md w-full flex flex-col items-center gap-2 mx-auto my-10">
+        <img 
+            src="{% static '/images/empty.png' %}" 
+            class="w-48"
+            alt=""
+        >
+        <h1 class="text-2xl font-bold">Тағы да сабақтар жүктеу</h1>
+        <span class="text-xl text-center">
+            Админ панеліне кіріп, ойындарды тиісті категорияға байланысты қосыңыз. 
+        </span>
+        <a 
+            href="/admin/"
+            target="_blank"
+            class="inline-flex items-center px-4 text-xl py-2 font-medium text-center text-orange-500 bg-white rounded-lg transition-all hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200">
+            Басқару панеліне өту
+        </a>
+    </div>
 </div>
 {% endblock profile_content %}

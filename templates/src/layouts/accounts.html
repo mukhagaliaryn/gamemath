@@ -3,6 +3,44 @@
 
 
 {% block content %}
+<style>
+    form #div_id_username label {
+        font-size: 20px;
+        color: white;
+    }
+    form #div_id_email label {
+        font-size: 20px;
+        color: white;
+    }
+    form #div_id_full_name label {
+        font-size: 20px;
+        color: white;
+    }
+    form #div_id_account_type label {
+        font-size: 20px;
+        color: white;
+    }
+    form #div_id_password label {
+        font-size: 20px;
+        color: white;
+    }
+    form #div_id_password1 label {
+        font-size: 20px;
+        color: white;
+    }
+    form #div_id_password1 #id_password1_helptext {
+        font-size: 16px;
+        color: white;
+    }
+    form #div_id_password2 label {
+        font-size: 20px;
+        color: white;
+    }
+    form #div_id_password2 #id_password2_helptext {
+        font-size: 16px;
+        color: white;
+    }
+</style>
 <div class="container mx-auto py-10 grid gap-10">
     <div class="flex justify-center">
         <a href="{% url 'home' %}" class="flex">

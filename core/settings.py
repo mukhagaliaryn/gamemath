@@ -22,10 +22,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'crispy_tailwind',
+    'django_summernote',
 
     'accounts.apps.AccountsConfig',
     'workspace.apps.WorkspaceConfig',
-    'progress.apps.ProgressConfig',
 ]
 
 
@@ -33,7 +33,6 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 SILENCED_SYSTEM_CHECKS = ['security.W019']
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'tailwind'
 CRISPY_TEMPLATE_PACK = 'tailwind'
-
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'debug',
@@ -110,7 +109,7 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 # Internationalization
 LANGUAGE_CODE = 'en'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Almaty'
 USE_I18N = True
 USE_TZ = True
 
@@ -133,6 +132,7 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
