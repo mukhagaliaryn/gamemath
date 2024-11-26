@@ -16,11 +16,24 @@ def home_view(request):
     return render(request, 'index.html', context)
 
 
+# Quizzes
 @login_required(login_url='/accounts/login/')
 def quizzes_view(request):
     qs = Quiz.objects.all()
     context = {
-        'quizzes': qs,
+        'quizzes': qs
     }
 
     return render(request, 'quizzes/index.html', context)
+
+
+# Quiz detail
+@login_required(login_url='/accounts/login/')
+def quiz_detail_view(request, pk):
+    quiz = get_object_or_404(Quiz, pk=pk)
+    questions = quiz.quiz_questions.all()
+    context = {
+        'quiz': quiz,
+        'questions': questions
+    }
+    return render(request, 'quizzes/detail.html', context)

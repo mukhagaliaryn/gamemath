@@ -7,9 +7,61 @@
 
 
 {% block main_content %}
-<div class="container">
-    <div>
-        <h1>Je;;</h1>
+<div class="relative">
+    <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {% for item in quizzes %}
+            <div
+                data-aos="fade-up" 
+                class="bg-orange-500 rounded-lg overflow-hidden"
+                title="{{ item.title }}"
+            >
+                <img 
+                    src="{{ item.poster.url }}" 
+                    class=""
+                    alt=""
+                >
+                <div class="grid gap-2 p-4">
+                    <h1 class="text-2xl font-bold line-clamp-1">{{ item.title }}</h1>
+                    
+                    <div class="flex">
+
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <form action="" class="w-full">
+                            <button
+                                type="submit"
+                                class="flex w-full gap-2 items-center justify-center px-4 py-2 text-xl font-medium text-center text-orange-500 bg-white rounded-lg transition-all hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
+                            >
+                                <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                </svg>
+                              
+                                Ойынды қосу
+                            </button> 
+                        </form>
+
+                        <div class="flex-1 flex gap-2">
+                            <div class="flex">
+                                <svg class="w-6 h-6 text-red-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8.597 3.2A1 1 0 0 0 7.04 4.289a3.49 3.49 0 0 1 .057 1.795 3.448 3.448 0 0 1-.84 1.575.999.999 0 0 0-.077.094c-.596.817-3.96 5.6-.941 10.762l.03.049a7.73 7.73 0 0 0 2.917 2.602 7.617 7.617 0 0 0 3.772.829 8.06 8.06 0 0 0 3.986-.975 8.185 8.185 0 0 0 3.04-2.864c1.301-2.2 1.184-4.556.588-6.441-.583-1.848-1.68-3.414-2.607-4.102a1 1 0 0 0-1.594.757c-.067 1.431-.363 2.551-.794 3.431-.222-2.407-1.127-4.196-2.224-5.524-1.147-1.39-2.564-2.3-3.323-2.788a8.487 8.487 0 0 1-.432-.287Z"/>
+                                </svg>
+                                <span>{{ item.quiz_questions.count }}</span>
+                            </div>
+                            <div class="flex">
+                                <svg class="w-6 h-6 text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M17.44 3a1 1 0 0 1 .707.293l2.56 2.56a1 1 0 0 1 0 1.414L18.194 9.78 14.22 5.806l2.513-2.513A1 1 0 0 1 17.44 3Zm-4.634 4.22-9.513 9.513a1 1 0 0 0 0 1.414l2.56 2.56a1 1 0 0 0 1.414 0l9.513-9.513-3.974-3.974ZM6 6a1 1 0 0 1 1 1v1h1a1 1 0 0 1 0 2H7v1a1 1 0 1 1-2 0v-1H4a1 1 0 0 1 0-2h1V7a1 1 0 0 1 1-1Zm9 9a1 1 0 0 1 1 1v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 1 1 0-2h1v-1a1 1 0 0 1 1-1Z" clip-rule="evenodd"/>
+                                    <path d="M19 13h-2v2h2v-2ZM13 3h-2v2h2V3Zm-2 2H9v2h2V5ZM9 3H7v2h2V3Zm12 8h-2v2h2v-2Zm0 4h-2v2h2v-2Z"/>
+                                </svg>
+                                <span>10</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock main_content %}

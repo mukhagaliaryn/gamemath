@@ -41,7 +41,7 @@ class Question(models.Model):
     )
 
     def __str__(self):
-        return _('ID{} question belongs to quiz {}'.format(self.pk, self.quiz))
+        return '#{} - {}'.format(self.pk, self.quiz)
 
 
 # Option
