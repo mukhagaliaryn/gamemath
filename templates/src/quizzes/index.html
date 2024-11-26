@@ -8,7 +8,7 @@
 
 {% block main_content %}
 <div class="relative">
-    <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {% for item in quizzes %}
             <div
                 data-aos="fade-up" 
@@ -28,18 +28,30 @@
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <form action="" class="w-full">
-                            <button
-                                type="submit"
-                                class="flex w-full gap-2 items-center justify-center px-4 py-2 text-xl font-medium text-center text-orange-500 bg-white rounded-lg transition-all hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
-                            >
+                        {% if item.id in added_quizzes %}
+                            <!-- Если квиз уже добавлен -->
+                            <a href="{% url 'quiz_detail' item.id %}" class="flex w-full gap-2 items-center justify-center px-4 py-2 text-xl font-medium text-center text-white bg-green-500 rounded-lg transition-all hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300">
                                 <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z"/>
                                 </svg>
-                              
-                                Ойынды қосу
-                            </button> 
-                        </form>
+                                Ойынға кіру
+                            </a>
+                        {% else %}
+                            <!-- Если квиз не добавлен -->
+                            <form method="post" action="{% url 'create_quiz_control' %}" class="w-full">
+                                {% csrf_token %}
+                                <input type="hidden" name="quiz_id" value="{{ item.id }}">
+                                <button
+                                    type="submit"
+                                    class="flex w-full gap-2 items-center justify-center px-4 py-2 text-xl font-medium text-center text-orange-500 bg-white rounded-lg transition-all hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
+                                >
+                                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                    </svg>
+                                    Ойынды қосу
+                                </button>
+                            </form>
+                        {% endif %}
 
                         <div class="flex-1 flex gap-2">
                             <div class="flex">
@@ -53,13 +65,11 @@
                                     <path fill-rule="evenodd" d="M17.44 3a1 1 0 0 1 .707.293l2.56 2.56a1 1 0 0 1 0 1.414L18.194 9.78 14.22 5.806l2.513-2.513A1 1 0 0 1 17.44 3Zm-4.634 4.22-9.513 9.513a1 1 0 0 0 0 1.414l2.56 2.56a1 1 0 0 0 1.414 0l9.513-9.513-3.974-3.974ZM6 6a1 1 0 0 1 1 1v1h1a1 1 0 0 1 0 2H7v1a1 1 0 1 1-2 0v-1H4a1 1 0 0 1 0-2h1V7a1 1 0 0 1 1-1Zm9 9a1 1 0 0 1 1 1v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 1 1 0-2h1v-1a1 1 0 0 1 1-1Z" clip-rule="evenodd"/>
                                     <path d="M19 13h-2v2h2v-2ZM13 3h-2v2h2V3Zm-2 2H9v2h2V5ZM9 3H7v2h2V3Zm12 8h-2v2h2v-2Zm0 4h-2v2h2v-2Z"/>
                                 </svg>
-                                <span>10</span>
+                                <span>{{ item.max_score }}</span>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         {% endfor %}
     </div>

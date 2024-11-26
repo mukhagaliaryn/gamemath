@@ -21,12 +21,12 @@ class QuizControl(models.Model):
         Quiz, on_delete=models.CASCADE,
         related_name='q_quiz_controls', verbose_name=_('Quiz')
     )
-    status = models.BooleanField(_('Status'), max_length=128, choices=STATUS, default='STARTED')
+    status = models.CharField(_('Status'), max_length=128, choices=STATUS, default='STARTED')
     date_started = models.DateTimeField(_('Date started'))
-    date_finished = models.DateTimeField(_('Date finished'))
+    date_finished = models.DateTimeField(_('Date finished'), blank=True, null=True)
 
     def __str__(self):
-        return _('Quiz control: {} - {}'.format(self.user, self.quiz))
+        return 'Quiz control: {} - {}'.format(self.user, self.quiz)
 
     class Meta:
         verbose_name = _('QuizControl')
@@ -47,7 +47,7 @@ class UserQuiz(models.Model):
     total_score = models.PositiveSmallIntegerField(_('Total score'), default=0)
 
     def __str__(self):
-        return _('Quiz control: {} | User quiz: {} - {}'.format(self.quiz_control, self.username, self.quiz))
+        return 'Quiz control: {} | User quiz: {} - {}'.format(self.quiz_control, self.username, self.quiz)
 
     class Meta:
         verbose_name = _('UserQuiz')
@@ -64,7 +64,7 @@ class UserAnswer(models.Model):
     score = models.PositiveSmallIntegerField(_('Answer score'), default=0)
 
     def __str__(self):
-        return _('{} answer {}'.format(self.user_quiz, self.pk))
+        return '{} answer {}'.format(self.user_quiz, self.pk)
 
     class Meta:
         verbose_name = _('UserAnswer')

@@ -3,7 +3,7 @@
 
 
 {% block content %}
-<nav class="fixed top-0 z-50 w-full bg-amber-400">
+<nav class="fixed top-0 z-40 w-full bg-amber-400">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
             <div class="flex items-center justify-start rtl:justify-end">
@@ -22,7 +22,9 @@
                     <img src="{% static '/images/icon.png' %}" class="h-12 w-12" alt="FlowBite Logo" />
                     <span
                         class="self-center text-4xl font-black whitespace-nowrap"
-                    >GameMath</span>
+                    >
+                        GameMath
+                    </span>
                 </a>
             </div>
             
@@ -42,20 +44,20 @@
                         id="dropdown-user"
                     >
                         <div class="px-4 py-3" role="none">
-                            <p class="text-2xl font-extrabold text-white" role="none">
+                            <p class="text-xl xl:text-2xl font-extrabold text-white" role="none">
                                 {{ user.full_name }}
                             </p>
-                            <p class="text-xl font-medium text-white truncate" role="none"></p>
+                            <p class="font-medium text-white truncate" role="none"></p>
                                 {{ user.username }}
                             </p>
-                            <p class="text-xl font-medium text-white truncate" role="none">
+                            <p class="font-medium text-white truncate" role="none">
                                 {{ user.email }}
                             </p>
                         </div>
                         <ul class="py-1" role="none">
                             <li>
                                 <a href="{% url 'profile' %}"
-                                    class="block px-4 py-2 text-xl text-white hover:bg-orange-400"
+                                    class="block px-4 py-2 text-white hover:bg-orange-400"
                                     role="menuitem">Профиль</a>
                             </li>
                             <li>
@@ -63,7 +65,7 @@
                                     {% csrf_token %}
                                     <button 
                                         type="submit"
-                                        class="w-full text-left px-4 py-2 text-xl text-white hover:bg-orange-400"
+                                        class="w-full text-left px-4 py-2 text-white hover:bg-orange-400"
                                     >
                                         Жүйеден шығу
                                     </button>
@@ -84,7 +86,7 @@
         <ul class="space-y-2 font-medium">
             <li>
                 <a href="{% url 'home' %}"
-                    class="flex items-center p-2 text-white text-xl transition-all rounded-lg hover:bg-orange-400 group {% if request.path == '/' %}bg-orange-500{% endif %}">
+                    class="flex items-center p-2 text-white transition-all rounded-lg hover:bg-orange-400 group {% if request.path == '/' %}bg-orange-500{% endif %}">
                     <svg class="w-10 h-10 text-white transition duration-75 group-hover:text-white"
                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                         <path
@@ -97,7 +99,7 @@
             </li>
             <li>
                 <a href="{% url 'quizzes' %}"
-                    class="flex items-center p-2 text-white text-xl transition-all rounded-lg hover:bg-orange-400 {% if request.path == '/quizzes/' %}bg-orange-500{% endif %}">
+                    class="flex items-center p-2 text-white transition-all rounded-lg hover:bg-orange-400 {% if request.path == '/quizzes/' %}bg-orange-500{% endif %}">
                     <svg class="flex-shrink-0 w-10 h-10 text-white transition duration-75 group-hover:text-white"
                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
                         <path
@@ -111,6 +113,26 @@
 </aside>
 
 <div class="p-4 mt-14 sm:ml-64">
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="">
+                <div class="alert {{ message.tags }} flex items-center p-4 mb-4 text-green-800 rounded-lg bg-green-100"
+                    role="alert">
+                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <div>
+                        {{ message }}
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     {% block main_content %}
     {% endblock main_content %}
 </div>

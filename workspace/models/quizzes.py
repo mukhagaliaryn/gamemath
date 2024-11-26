@@ -16,6 +16,7 @@ class Quiz(models.Model):
         _('Interface'), max_length=128,
         choices=INTERFACE, default='DEFAULT'
     )
+    max_score = models.PositiveSmallIntegerField(_('Max score'), default=0)
 
     def __str__(self):
         return self.title
