@@ -3,6 +3,9 @@ from accounts.models import User
 from workspace.models import Option
 from workspace.models.quizzes import Quiz
 from django.utils.translation import gettext_lazy as _
+from django.core.files.base import ContentFile
+import qrcode
+from io import BytesIO
 
 
 # QuizControl
@@ -10,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 class QuizControl(models.Model):
     STATUS = (
         ('STARTED', _('Started')),
-        ('PROCESS', _('Process')),
+        # ('PROCESS', _('Process')),
         ('FINISHED', _('Finished')),
     )
     user = models.ForeignKey(
@@ -21,9 +24,30 @@ class QuizControl(models.Model):
         Quiz, on_delete=models.CASCADE,
         related_name='q_quiz_controls', verbose_name=_('Quiz')
     )
+    qr_code = models.ImageField('QR Code', upload_to='workspaces/qr_codes/', blank=True, null=True)
     status = models.CharField(_('Status'), max_length=128, choices=STATUS, default='STARTED')
     date_started = models.DateTimeField(_('Date started'))
     date_finished = models.DateTimeField(_('Date finished'), blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.qr_code:
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+            )
+            link = f'http://127.0.0.1:8000/quiz/control/{self.pk}/view/'
+            qr.add_data(link)
+            qr.make(fit=True)
+
+            img = qr.make_image(fill_color="black", back_color="white")
+            buffer = BytesIO()
+            img.save(buffer, format="PNG")
+            buffer.seek(0)
+            self.qr_code.save(f'qr_code_{self.id}.png', ContentFile(buffer.read()), save=False)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return 'Quiz control: {} - {}'.format(self.user, self.quiz)

@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from workspace.models import Quiz, QuizControl
+from workspace.models import Quiz, QuizControl, UserQuiz, UserAnswer, Option
 
 
 # Home page
@@ -19,11 +19,12 @@ def home_view(request):
 # Quizzes
 @login_required(login_url='/accounts/login/')
 def quizzes_view(request):
-    qs = Quiz.objects.all()
-    added_quizzes = QuizControl.objects.filter(user=request.user).values_list('quiz_id', flat=True)
+    quizzes = Quiz.objects.all()
+    quiz_controls = QuizControl.objects.filter(user=request.user)
+    quizzes_with_controls = {qc.quiz_id: qc.id for qc in quiz_controls}
     context = {
-        'quizzes': qs,
-        'added_quizzes': added_quizzes,
+        'quizzes': quizzes,
+        'quizzes_with_controls': quizzes_with_controls,
     }
 
     return render(request, 'quizzes/index.html', context)
@@ -52,6 +53,21 @@ def create_quiz_control(request):
 
 
 @login_required
+def finish_quiz_control(request, pk):
+    quiz_control = get_object_or_404(QuizControl, pk=pk, user=request.user)
+
+    if quiz_control.status == 'FINISHED':
+        messages.warning(request, 'Бұл ойын аяқталып қойған!')
+        return redirect('home')
+
+    quiz_control.status = 'FINISHED'
+    quiz_control.date_finished = timezone.now()
+    quiz_control.save()
+    messages.warning(request, 'Ойын аяқталды!')
+    return redirect('home')
+
+
+@login_required
 def delete_quiz_control(request, pk):
     quiz_control = get_object_or_404(QuizControl, pk=pk, user=request.user)
 
@@ -65,11 +81,52 @@ def delete_quiz_control(request, pk):
 
 # Quiz detail
 @login_required(login_url='/accounts/login/')
-def quiz_detail_view(request, pk):
-    quiz = get_object_or_404(Quiz, pk=pk)
-    questions = quiz.quiz_questions.all()
+def quiz_control_detail_view(request, pk):
+    quiz_control = get_object_or_404(QuizControl, pk=pk)
     context = {
-        'quiz': quiz,
-        'questions': questions
+        'quiz_control': quiz_control,
     }
     return render(request, 'quizzes/detail.html', context)
+
+
+# Quiz control game
+def quiz_control_game_view(request, pk):
+    """
+    Отображение квиза с предварительной формой для заполнения username.
+    """
+    # Получаем QuizControl по id
+    quiz_control = get_object_or_404(QuizControl, id=pk)
+
+    # Проверяем, существует ли UserQuiz
+    user_quiz = UserQuiz.objects.filter(quiz_control=quiz_control).first()
+
+    if request.method == 'POST':
+        if not user_quiz:
+            # Создаем UserQuiz на основе заполненного username
+            username = request.POST.get('username', 'Anonymous')
+            user_quiz = UserQuiz.objects.create(
+                quiz_control=quiz_control,
+                quiz=quiz_control.quiz,
+                username=username,
+            )
+            return redirect(request.path)
+
+        # Если UserQuiz уже существует, сохраняем ответы
+        questions = quiz_control.quiz.quiz_questions.all()
+        for question in questions:
+            answer_ids = request.POST.getlist(f'question_{question.id}')
+            if answer_ids:
+                user_answer = UserAnswer.objects.create(user_quiz=user_quiz)
+                user_answer.answers.add(*Option.objects.filter(id__in=answer_ids))
+                user_answer.score = sum(option.score for option in user_answer.answers.all())
+                user_answer.save()
+
+        # Перенаправление на следующую страницу (результаты или что-то ещё)
+        return redirect('quiz_result', pk=user_quiz.id)
+
+    context = {
+        'quiz_control': quiz_control,
+        'user_quiz': user_quiz,
+        'show_modal': not bool(user_quiz),  # Показывать модальное окно, если UserQuiz не создан
+    }
+    return render(request, 'quizzes/game.html', context)

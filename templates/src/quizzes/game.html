@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ quiz_control.quiz.title }} | GameMath
+{% endblock title %}
+
+
+{% block content %}
+    <div class="bg-red-500 h-screen">
+        {% if quiz_control.status == 'FINISHED' %}
+            <div class="max-w-2xl w-full mx-auto py-20 text-center">
+                <h1 class="text-6xl font-bold">Ойын аяталған!</h1>
+            </div>
+            
+        {% else %}
+            <!-- Основной контент -->
+            {% if user_quiz %}
+                
+                <h1>{{ user_quiz.username }}</h1>
+                <h1>{{ quiz_control.quiz.title }}</h1>
+
+                <form method="post">
+                    {% csrf_token %}
+                    {% for question in quiz_control.quiz.quiz_questions.all %}
+                        <div>
+                            <h2>{{ question.question_body|safe }}</h2>
+                            {% for option in question.options.all %}
+                                <label>
+                                    <input type="checkbox" name="question_{{ question.id }}" value="{{ option.id }}">
+                                    {{ option.option_body|safe }}
+                                </label>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit">Отправить ответы</button>
+                </form>
+            {% else %}
+                <!-- Модальное окно -->
+                <div id="username-modal" class="modal">
+                    <div class="modal-content">
+                        <h2>Введите имя пользователя</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            <label for="username">Имя пользователя:</label>
+                            <input type="text" id="username" name="username" required>
+                            <button type="submit">Продолжить</button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock content %}

@@ -36,5 +36,23 @@
     <script>
         AOS.init();
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const copyButtons = document.querySelectorAll('.copy-btn');
+    
+            copyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const url = button.getAttribute('data-url');
+                    navigator.clipboard.writeText(window.location.origin + url + 'view/')
+                        .then(() => {
+                            alert('Сілтеме көшіріліп алынды!');
+                        })
+                        .catch(err => {
+                            console.error('Қателік кетті: ', err);
+                        });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

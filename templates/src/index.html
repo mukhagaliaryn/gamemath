@@ -60,11 +60,15 @@
                 <div class="flex items-center justify-between gap-2 rounded-xl p-4 bg-orange-500">
                     <!-- Overview -->
                     <div class="flex items-start gap-4 w-full max-w-md">
-                        <img src="{{ item.quiz.poster.url }}" class="w-24 rounded-lg" alt="">
+                        <a href="{% url 'quiz_control_detail' item.id %}">
+                            <img src="{{ item.quiz.poster.url }}" class="w-24 rounded-lg transition-all hover:scale-105" alt="">
+                        </a>
                         <div class="flex flex-col items-start gap-1">
-                            <h1 class="text-2xl font-bold line-clamp-1">{{ item.quiz.title }}</h1>
+                            <a href="{% url 'quiz_control_detail' item.id %}">
+                                <h1 class="text-2xl font-bold line-clamp-1 transition-all hover:scale-105">{{ item.quiz.title }}</h1>
+                            </a>
                             <button
-                                data-url="{% url 'quiz_detail' item.quiz.id %}"
+                                data-url="{% url 'quiz_control_detail' item.id %}"
                                 class="copy-btn inline-flex gap-2 items-center justify-center px-4 py-2 text-base font-medium text-center text-orange-500 bg-white rounded-lg transition-all hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
                             >
                                 <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -73,7 +77,6 @@
                                 Сілтемесін көшіріп алу
                             </button> 
                         </div>
-                        
                     </div>
 
                     <!-- Date started -->
@@ -85,9 +88,9 @@
                         </div>
                         <div>
                             <h1 class="font-bold">Басталу/аяқталу уақыты</h1>
-                            <span>{{ item.date_started }}</span>
+                            <span class="text-base">{{ item.date_started }}</span>
                             <br>
-                            <span>
+                            <span class="text-base">
                                 {% if item.date_finished %}
                                     {{ item.date_finished }}
                                 {% else %}
@@ -100,9 +103,15 @@
                     <!-- Status -->
                     <div class="flex gap-2 items-center">
                         <div>
-                            <svg class="w-8 h-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z"/>
-                            </svg>
+                            {% if item.status == 'FINISHED' %}
+                                <svg class="w-8 h-8 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M13.09 3.294c1.924.95 3.422 1.69 5.472.692a1 1 0 0 1 1.438.9v9.54a1 1 0 0 1-.562.9c-2.981 1.45-5.382.24-7.25-.701a38.739 38.739 0 0 0-.622-.31c-1.033-.497-1.887-.812-2.756-.77-.76.036-1.672.357-2.81 1.396V21a1 1 0 1 1-2 0V4.971a1 1 0 0 1 .297-.71c1.522-1.506 2.967-2.185 4.417-2.255 1.407-.068 2.653.453 3.72.967.225.108.443.216.655.32Z"/>
+                                </svg>
+                            {% else %}
+                                <svg class="w-8 h-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z"/>
+                                </svg>
+                            {% endif %}
                         </div>
                         <div>
                             <h1 class="font-bold">Статус</h1>
@@ -123,7 +132,7 @@
                         </div>
                     </div>
 
-                    <!-- Statictics/Settings -->
+                    <!-- Modal settings -->
                     <div class="flex gap-2">
                         <!-- Statistic -->
                         <div>
@@ -140,13 +149,16 @@
                             
                             <div id="statictic-modal-{{ item.id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                 <div class="relative p-4 w-full max-w-2xl max-h-full">
-                                    <!-- Modal content -->
                                     <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                                        <!-- Modal header -->
                                         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                                            <h3 class="font-semibold text-2xl text-gray-900">
-                                                Статистикалар
-                                            </h3>
+                                            <div class="flex gap-2">
+                                                <svg class="w-8 h-8 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15v4m6-6v6m6-4v4m6-6v6M3 11l6-5 6 5 5.5-5.5"/>
+                                                </svg>
+                                                <h3 class="font-semibold text-2xl text-gray-900">
+                                                    Статистикалар
+                                                </h3>
+                                            </div>
                                             <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="statictic-modal-{{ item.id }}">
                                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -154,23 +166,28 @@
                                                 <span class="sr-only">Close modal</span>
                                             </button>
                                         </div>
-                                        <!-- Modal body -->
-                                        <div class="p-4 md:p-5 space-y-4">
-                                            <p class="leading-relaxed text-gray-500">
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                                                Nihil quos itaque beatae perferendis excepturi facilis sit 
-                                                quo reiciendis necessitatibus expedita.
-                                            </p>
-                                        </div>
-                                        <!-- Modal footer -->
-                                        <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                                            <button 
-                                                data-modal-hide="statictic-modal-{{ item.id }}" 
-                                                type="button" 
-                                                class="py-2.5 px-5 ms-3 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-orange-500 focus:z-10 focus:ring-4 focus:ring-gray-100"
-                                            >
-                                                Кері қайту
-                                            </button>
+                                        <div class="relative">
+                                            <div class="p-4 md:p-5 space-y-4">
+                                                {% if item.status == 'FINISHED' %}
+                                                    <div>
+    
+                                                    </div>
+                                                {% else %}
+                                                    <span class="text-gray-500">
+                                                        Ойын әлі аяталған жоқ. Қатысушылар 
+                                                        әлі ойынды ойнауды
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                                <button 
+                                                    data-modal-hide="statictic-modal-{{ item.id }}" 
+                                                    type="button" 
+                                                    class="py-2.5 px-5 ms-3 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-orange-500 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                                                >
+                                                    Жабу
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -192,13 +209,17 @@
                             
                             <div id="setting-modal-{{ item.id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                 <div class="relative p-4 w-full max-w-2xl max-h-full">
-                                    <!-- Modal content -->
                                     <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                                        <!-- Modal header -->
                                         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                                            <h3 class="font-semibold text-2xl text-gray-900">
-                                                Баптаулар
-                                            </h3>
+                                            <div class="flex gap-2">
+                                                <svg class="w-8 h-8 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4"/>
+                                                </svg>
+                                                <h3 class="font-semibold text-2xl text-gray-900">
+                                                    Баптаулар
+                                                </h3>
+                                            </div>
+                                            
                                             <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="setting-modal-{{ item.id }}">
                                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -206,35 +227,64 @@
                                                 <span class="sr-only">Close modal</span>
                                             </button>
                                         </div>
-                                        <!-- Modal body -->
-                                        <div class="p-4 md:p-5 space-y-4">
-                                            <p class="leading-relaxed text-gray-500">
-                                                "{{ item.quiz.title }}" ойынды өшіруді қалайсыз ба?
-                                            </p>
-                                            <p class="leading-relaxed text-gray-500">
-                                                Егер өшірген жағдайда барлық ойынды өткен қатысушылар жайлы 
-                                                деректердің барлығы жойылады!
-                                            </p>
-                                        </div>
-                                        <!-- Modal footer -->
-                                        <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                                            <form method="post" action="{% url 'delete_quiz_control' item.id %}">
-                                                {% csrf_token %}
+                                        <div class="p-4 md:p-5 space-y-4 border-b">
+                                            <h1 class="text-gray-900 text-2xl font-bold">Ойынды өшіру</h1>
+                                            <div class="">
+                                                <p class="leading-relaxed text-gray-500">
+                                                    "{{ item.quiz.title }}" ойынды өшіруді қалайсыз ба?
+                                                </p>
+                                                <p class="leading-relaxed text-gray-500">
+                                                    Егер өшірген жағдайда барлық ойынды өткен қатысушылар жайлы 
+                                                    деректердің барлығы жойылады!
+                                                </p>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <form method="post" action="{% url 'delete_quiz_control' item.id %}">
+                                                    {% csrf_token %}
+                                                    <button 
+                                                        type="submit"
+                                                        class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xl px-5 py-2.5 mt-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                                                    >
+                                                        Ойынды өшіру
+                                                    </button>
+                                                </form>
                                                 <button 
-                                                    type="submit"
-                                                    class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xl px-5 py-2.5 mt-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                                                    data-modal-hide="setting-modal-{{ item.id }}" 
+                                                    type="button" 
+                                                    class="py-2.5 px-5 ms-3 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-orange-500 focus:z-10 focus:ring-4 focus:ring-gray-100"
                                                 >
-                                                    Ойынды өшіру
+                                                    Кері қайту
                                                 </button>
-                                            </form>
-                                            <button 
-                                                data-modal-hide="setting-modal-{{ item.id }}" 
-                                                type="button" 
-                                                class="py-2.5 px-5 ms-3 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-orange-500 focus:z-10 focus:ring-4 focus:ring-gray-100"
-                                            >
-                                                Кері қайту
-                                            </button>
+                                            </div>
                                         </div>
+                                        {% if item.status != 'FINISHED' %}
+                                            <div class="p-4 md:p-5 space-y-4">
+                                                <h1 class="text-gray-900 text-2xl font-bold">Ойынды аяқтау</h1>
+                                                <div class="">
+                                                    <p class="leading-relaxed text-gray-500">
+                                                        "{{ item.quiz.title }}" ойынды аяқтауды қалайсыз ба?
+                                                    </p>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <form method="post" action="{% url 'finish_quiz_control' item.id %}">
+                                                        {% csrf_token %}
+                                                        <button 
+                                                            type="submit"
+                                                            class="focus:outline-none text-white bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-xl px-5 py-2.5 mt-2 mb-2"
+                                                        >
+                                                            Ойынды аятау
+                                                        </button>
+                                                    </form>
+                                                    <button 
+                                                        data-modal-hide="setting-modal-{{ item.id }}" 
+                                                        type="button" 
+                                                        class="py-2.5 px-5 ms-3 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-orange-500 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                                                    >
+                                                        Кері қайту
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -246,23 +296,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const copyButtons = document.querySelectorAll('.copy-btn');
-
-        copyButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const url = button.getAttribute('data-url'); // Получаем ссылку из data-url
-                navigator.clipboard.writeText(window.location.origin + url)
-                    .then(() => {
-                        alert('Сілтеме көшіріліп алынды!');
-                    })
-                    .catch(err => {
-                        console.error('Қателік кетті: ', err);
-                    });
-            });
-        });
-    });
-</script>
 {% endblock main_content %}
