@@ -53,6 +53,7 @@ class Option(models.Model):
     )
     option_body = models.TextField(_('Option body'))
     is_correct = models.BooleanField(_('Is correct answer'), default=False)
+    score = models.PositiveSmallIntegerField(_('Score'), default=0)
 
     def __str__(self):
-        return _('ID{} option belongs to ID{} question'.format(self.pk, self.question.pk))
+        return 'ID{} option belongs to ID{} question'.format(self.pk, self.question.pk)

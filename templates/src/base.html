@@ -6,13 +6,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}GameMath{% endblock title %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
     <link rel="shortcut icon" href="{% static '/images/icon.png' %}" type="image/x-icon">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -23,8 +25,6 @@
             }
         }
     </script>
-
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 
 <body class="font-fira bg-amber-400 text-white text-base xl:text-lg 2xl:text-xl">
@@ -32,18 +32,19 @@
     {% endblock content %}
 
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
     </script>
     <script>
+
+        // Start quiz control
         document.addEventListener('DOMContentLoaded', () => {
             const copyButtons = document.querySelectorAll('.copy-btn');
     
             copyButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const url = button.getAttribute('data-url');
-                    navigator.clipboard.writeText(window.location.origin + url + 'view/')
+                    navigator.clipboard.writeText(window.location.origin + url + 'start/')
                         .then(() => {
                             alert('Сілтеме көшіріліп алынды!');
                         })

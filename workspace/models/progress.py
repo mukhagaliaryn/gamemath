@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.files.base import ContentFile
 import qrcode
 from io import BytesIO
+import uuid
 
 
 # QuizControl
@@ -37,7 +38,7 @@ class QuizControl(models.Model):
                 box_size=10,
                 border=4,
             )
-            link = f'http://127.0.0.1:8000/quiz/control/{self.pk}/view/'
+            link = f'http://127.0.0.1:8000/quiz/control/{self.pk}/start/'
             qr.add_data(link)
             qr.make(fit=True)
 
@@ -68,6 +69,7 @@ class UserQuiz(models.Model):
         related_name='q_user_quizzes', verbose_name=_('Quiz')
     )
     username = models.CharField(_('Username'), max_length=128)
+    session_id = models.UUIDField(_('Session ID'), default=uuid.uuid4, unique=True)
     total_score = models.PositiveSmallIntegerField(_('Total score'), default=0)
 
     def __str__(self):
@@ -85,7 +87,6 @@ class UserAnswer(models.Model):
         related_name='uq_answers', verbose_name=_('UserQuiz')
     )
     answers = models.ManyToManyField(Option, verbose_name=_('Answer'))
-    score = models.PositiveSmallIntegerField(_('Answer score'), default=0)
 
     def __str__(self):
         return '{} answer {}'.format(self.user_quiz, self.pk)

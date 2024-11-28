@@ -8,5 +8,7 @@ urlpatterns = [
     path('quiz/control/<int:pk>/finish/', views.finish_quiz_control, name='finish_quiz_control'),
     path('quiz/control/<int:pk>/delete/', views.delete_quiz_control, name='delete_quiz_control'),
     path('quiz/control/<int:pk>/', views.quiz_control_detail_view, name='quiz_control_detail'),
-    path('quiz/control/<int:pk>/view/', views.quiz_control_game_view, name='quiz_control_game'),
+
+    path('quiz/control/<int:pk>/start/', views.start_quiz_session, name='start_quiz_session'),
+    path('quiz/control/<int:pk>/session/<uuid:session_id>/', views.quiz_test_view, name='quiz_test_view'),
 ]

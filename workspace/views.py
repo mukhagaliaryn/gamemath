@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from workspace.models import Quiz, QuizControl, UserQuiz, UserAnswer, Option
+import uuid
 
 
 # Home page
@@ -90,43 +91,48 @@ def quiz_control_detail_view(request, pk):
 
 
 # Quiz control game
-def quiz_control_game_view(request, pk):
-    """
-    Отображение квиза с предварительной формой для заполнения username.
-    """
-    # Получаем QuizControl по id
+# ----------------------------------------------------------------------------------------------------------------------
+def start_quiz_session(request, pk):
     quiz_control = get_object_or_404(QuizControl, id=pk)
 
-    # Проверяем, существует ли UserQuiz
-    user_quiz = UserQuiz.objects.filter(quiz_control=quiz_control).first()
+    if request.method == 'POST':
+        session_id = uuid.uuid4()
+
+        username = request.POST.get('username', 'Anonymous')
+        UserQuiz.objects.create(
+            quiz_control=quiz_control,
+            quiz=quiz_control.quiz,
+            session_id=session_id,
+            username=username,
+        )
+        return redirect('quiz_test_view', pk=pk, session_id=session_id)
+
+    return render(request, 'quizzes/start.html', {'quiz_control': quiz_control})
+
+
+def quiz_test_view(request, pk, session_id):
+    quiz_control = get_object_or_404(QuizControl, id=pk)
+    user_quiz = get_object_or_404(UserQuiz, quiz_control=quiz_control, session_id=session_id)
 
     if request.method == 'POST':
-        if not user_quiz:
-            # Создаем UserQuiz на основе заполненного username
-            username = request.POST.get('username', 'Anonymous')
-            user_quiz = UserQuiz.objects.create(
-                quiz_control=quiz_control,
-                quiz=quiz_control.quiz,
-                username=username,
-            )
-            return redirect(request.path)
-
-        # Если UserQuiz уже существует, сохраняем ответы
         questions = quiz_control.quiz.quiz_questions.all()
         for question in questions:
             answer_ids = request.POST.getlist(f'question_{question.id}')
             if answer_ids:
-                user_answer = UserAnswer.objects.create(user_quiz=user_quiz)
-                user_answer.answers.add(*Option.objects.filter(id__in=answer_ids))
+                user_answer, _ = UserAnswer.objects.get_or_create(user_quiz=user_quiz)
+                user_answer.answers.set(Option.objects.filter(id__in=answer_ids))
                 user_answer.score = sum(option.score for option in user_answer.answers.all())
                 user_answer.save()
 
-        # Перенаправление на следующую страницу (результаты или что-то ещё)
+        user_quiz.total_score = sum(answer.score for answer in user_quiz.uq_answers.all())
+        user_quiz.save()
+
         return redirect('quiz_result', pk=user_quiz.id)
 
+    questions = quiz_control.quiz.quiz_questions.all()
     context = {
         'quiz_control': quiz_control,
         'user_quiz': user_quiz,
-        'show_modal': not bool(user_quiz),  # Показывать модальное окно, если UserQuiz не создан
+        'questions': questions,
     }
     return render(request, 'quizzes/game.html', context)
