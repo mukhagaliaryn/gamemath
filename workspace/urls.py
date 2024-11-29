@@ -11,4 +11,5 @@ urlpatterns = [
 
     path('quiz/control/<int:pk>/start/', views.start_quiz_session, name='start_quiz_session'),
     path('quiz/control/<int:pk>/session/<uuid:session_id>/', views.quiz_test_view, name='quiz_test_view'),
+    path('user/quiz/<int:pk>/', views.quiz_result, name='quiz_result'),
 ]

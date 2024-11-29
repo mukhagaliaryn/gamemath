@@ -14,7 +14,6 @@ import uuid
 class QuizControl(models.Model):
     STATUS = (
         ('STARTED', _('Started')),
-        # ('PROCESS', _('Process')),
         ('FINISHED', _('Finished')),
     )
     user = models.ForeignKey(
@@ -60,6 +59,10 @@ class QuizControl(models.Model):
 
 # UserQuiz
 class UserQuiz(models.Model):
+    STATUS = (
+        ('STARTED', _('Started')),
+        ('FINISHED', _('Finished')),
+    )
     quiz_control = models.ForeignKey(
         QuizControl, on_delete=models.CASCADE,
         related_name='qc_user_quizzes', verbose_name=_('QuizControl')
@@ -71,6 +74,7 @@ class UserQuiz(models.Model):
     username = models.CharField(_('Username'), max_length=128)
     session_id = models.UUIDField(_('Session ID'), default=uuid.uuid4, unique=True)
     total_score = models.PositiveSmallIntegerField(_('Total score'), default=0)
+    status = models.CharField(_('Status'), max_length=128, choices=STATUS, default='STARTED')
 
     def __str__(self):
         return 'Quiz control: {} | User quiz: {} - {}'.format(self.quiz_control, self.username, self.quiz)
@@ -87,6 +91,7 @@ class UserAnswer(models.Model):
         related_name='uq_answers', verbose_name=_('UserQuiz')
     )
     answers = models.ManyToManyField(Option, verbose_name=_('Answer'))
+    score = models.PositiveSmallIntegerField(_('Score'), default=0)
 
     def __str__(self):
         return '{} answer {}'.format(self.user_quiz, self.pk)

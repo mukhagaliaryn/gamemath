@@ -10,7 +10,7 @@
     <div class="">
         <div class="flex items-start gap-4 flex-col lg:flex-row">
             <div 
-                class="overflow-hidden rounded-xl w-full xl:max-w-xl 2xl:max-w-screen-md"
+                class="overflow-hidden rounded-xl w-full lg:max-w-lg xl:max-w-xl 2xl:max-w-screen-md"
                 data-aos="fade-down-right"
             >
                 <img src="{{ quiz_control.quiz.poster.url }}" alt="">
@@ -18,7 +18,7 @@
             
             <div
                 data-aos="fade-down-left"
-                class="flex-1 grid gap-8"
+                class="flex-1 grid gap-8 w-full"
             >
                 <!-- About -->
                 <div class="grid gap-4 p-6 rounded-xl bg-orange-500">
@@ -28,10 +28,10 @@
                         {{ quiz_control.quiz.description|safe }}
                     </span>
                     <hr>
-                    <div class="flex gap-8">
+                    <div class="grid gap-4 md:flex lg:grid 2xl:flex">
                         <button
                             data-url="{% url 'quiz_control_detail' quiz_control.id %}"
-                            class="copy-btn inline-flex gap-2 items-center justify-center px-4 py-2 font-medium text-center text-orange-500 bg-white rounded-lg transition-all hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
+                            class="copy-btn flex gap-2 items-center justify-center px-4 py-2 font-medium text-center text-orange-500 bg-white rounded-lg transition-all hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
                         >
                             <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M14 4v3a1 1 0 0 1-1 1h-3m4 10v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h2m11-3v10a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1V7.87a1 1 0 0 1 .24-.65l2.46-2.87a1 1 0 0 1 .76-.35H18a1 1 0 0 1 1 1Z"/>

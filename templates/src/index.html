@@ -1,5 +1,7 @@
 {% extends 'layouts/main.html' %}
 {% load static %}
+{% load custom_filters %}
+
 
 {% block title %}
     Басқару панелі | GameMath
@@ -7,10 +9,10 @@
 
 
 {% block main_content %}
-<div class="container grid gap-8">
+<div class="container grid gap-4 sm:gap-8">
     <!-- Welcome -->
     <div data-aos="fade-left">
-        <h1 class="mb-2 font-extrabold text-4xl xl:text-5xl 2xl:text-6xl">
+        <h1 class="mb-2 font-extrabold text-2xl sm:text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl">
             Сізді көргенімізге қуаныштымыз
             <span class="text-transparent bg-clip-text bg-gradient-to-r to-orange-600 from-red-600">
                 {{ request.user.full_name }}
@@ -20,10 +22,10 @@
 
     <!-- Link to quizzes -->
     <div 
-        data-aos="fade-up"    
-        class="flex items-start justify-between gap-4 bg-orange-500 rounded-xl p-10"
+        data-aos="fade-up"
+        class="grid lg:flex items-start justify-between gap-4 bg-orange-500 rounded-xl p-6 sm:p-12"
     >
-        <div class="grid gap-4 max-w-screen-md">
+        <div class="grid gap-4 w-full lg:max-w-screen-md">
             <h1 class="font-extrabold text-2xl md:text-4xl">Біздің порталға қош келдіңіз</h1>
             <p class="font-normal">
                 Біздің порталда бастауыш сыныптағы математика пәніндегі тақырыптарға арналған
@@ -43,7 +45,7 @@
             </div>
         </div>
 
-        <div class="overflow-hidden rounded-xl w-48">
+        <div class="overflow-hidden rounded-xl w-full lg:w-48">
             <img src="{% static '/images/home.png' %}"
                 class="w-full"
                 alt=""
@@ -55,11 +57,11 @@
         <div data-aos="fade-right">
             <h1 class="text-xl md:text-2xl lg:text-3xl font-extrabold">Таңдалып алынған ойындар</h1>
         </div>
-        <div class="grid gap-2">
+        <div class="grid gap-2 overflow-x-auto">
             {% for item in user.u_quiz_controls.all %}
-                <div class="flex items-center justify-between gap-2 rounded-xl p-4 bg-orange-500">
+                <div class="min-w-[1024px] flex items-center justify-between gap-2 rounded-xl p-4 bg-orange-500">
                     <!-- Overview -->
-                    <div class="flex items-start gap-4 w-full max-w-md">
+                    <div class="flex items-start gap-4 xl:w-full xl:max-w-sm 2xl:max-w-md">
                         <a href="{% url 'quiz_control_detail' item.id %}">
                             <img src="{{ item.quiz.poster.url }}" class="w-24 rounded-lg transition-all hover:scale-105" alt="">
                         </a>
@@ -170,13 +172,40 @@
                                             <div class="p-4 md:p-5 space-y-4">
                                                 {% if item.status == 'FINISHED' %}
                                                     <div>
-    
+                                                        
                                                     </div>
                                                 {% else %}
-                                                    <span class="text-gray-500">
-                                                        Ойын әлі аяталған жоқ. Қатысушылар 
-                                                        әлі ойынды ойнауды
-                                                    </span>
+                                                    <div class="grid">
+                                                        {% for user_quiz in item.qc_user_quizzes.all %}
+                                                            <div class="flex items-center justify-between gap-2 py-4 border-b">
+                                                                <div class="flex items-center gap-4">
+                                                                    <div class="flex gap-2 items-center">
+                                                                        <div class="{{ ''|random_tailwind_color }} w-10 h-10 flex justify-center items-center rounded-full">
+                                                                            <span class="text-2xl font-bold">{{ user_quiz.username|first_upper }}</span>
+                                                                        </div>  
+                                                                        <h1 class="text-xl font-bold text-gray-900">{{ user_quiz.username }}</h1>
+                                                                    </div>
+
+                                                                    <div class="flex text-gray-900 gap-2">
+                                                                        <div class="text-amber-500">
+                                                                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                                                <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
+                                                                            </svg>
+                                                                        </div>
+                                                                        <div class="font-semibold">
+                                                                            <span>{{ item.quiz.max_score }}/{{ user_quiz.total_score }}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex gap-1 items-center py-1 px-2 rounded-lg bg-green-500">
+                                                                    <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z"/>
+                                                                    </svg>
+                                                                    <span class="block text-white font-medium text-sm">{{ user_quiz.get_status_display }}</span>
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
                                                 {% endif %}
                                             </div>
                                             <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">

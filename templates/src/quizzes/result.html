@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ quiz_control.quiz.title }} | GameMath
+{% endblock title %}
+
+
+{% block content %}
+<div>
+    <h1>Результаты</h1>
+    <p>Пользователь: {{ user_quiz.username }}</p>
+    <p>Сессия: {{ user_quiz.session_id }}</p>
+    <p>Общий балл: {{ user_quiz.total_score }}</p>
+</div>
+{% endblock content %}

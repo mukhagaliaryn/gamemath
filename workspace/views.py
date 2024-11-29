@@ -119,20 +119,25 @@ def quiz_test_view(request, pk, session_id):
         for question in questions:
             answer_ids = request.POST.getlist(f'question_{question.id}')
             if answer_ids:
-                user_answer, _ = UserAnswer.objects.get_or_create(user_quiz=user_quiz)
+                user_answer, _ = UserAnswer.objects.get_or_create(user_quiz=user_quiz, score=0)
                 user_answer.answers.set(Option.objects.filter(id__in=answer_ids))
                 user_answer.score = sum(option.score for option in user_answer.answers.all())
                 user_answer.save()
 
         user_quiz.total_score = sum(answer.score for answer in user_quiz.uq_answers.all())
+        user_quiz.status = 'FINISHED'
         user_quiz.save()
 
         return redirect('quiz_result', pk=user_quiz.id)
 
-    questions = quiz_control.quiz.quiz_questions.all()
     context = {
         'quiz_control': quiz_control,
         'user_quiz': user_quiz,
-        'questions': questions,
+        'questions': quiz_control.quiz.quiz_questions.all(),
     }
     return render(request, 'quizzes/game.html', context)
+
+
+def quiz_result(request, pk):
+    user_quiz = get_object_or_404(UserQuiz, id=pk)
+    return render(request, 'quizzes/result.html', {'user_quiz': user_quiz})
