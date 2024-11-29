@@ -1,12 +1,17 @@
 asgiref==3.8.1
+bleach==6.2.0
 crispy-tailwind==1.0.3
 Django==5.1.1
 django-admin-interface==0.28.9
 django-colorfield==0.11.0
 django-crispy-forms==2.3
+django-js-asset==2.2.0
+django-summernote==0.8.20.0
 pillow==10.4.0
 python-decouple==3.8
 python-slugify==8.0.4
+qrcode==8.0
 sqlparse==0.5.1
 text-unidecode==1.3
 typing_extensions==4.12.2
+webencodings==0.5.1
