@@ -71,5 +71,66 @@
             alert("Тест завершён!");
         }
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const questions = document.querySelectorAll('.question');
+            const progressBar = document.getElementById('progress-bar');
+            const prevButton = document.getElementById('prev-btn');
+            const nextButton = document.getElementById('next-btn');
+            const finishButton = document.getElementById('finish-btn');
+            let currentQuestionIndex = 0;
+
+            // Инициализация: показать первый вопрос
+            questions[currentQuestionIndex].classList.remove('hidden');
+
+            // Обновление прогресса
+            function updateProgress() {
+                const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+                progressBar.style.width = `${progress}%`;
+
+                // Управление кнопками
+                prevButton.disabled = currentQuestionIndex === 0;
+                nextButton.disabled = currentQuestionIndex === questions.length - 1;
+                finishButton.disabled = currentQuestionIndex !== questions.length - 1;
+            }
+
+            // Переход к следующему вопросу
+            nextButton.addEventListener('click', () => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    questions[currentQuestionIndex].classList.add('hidden');
+                    currentQuestionIndex++;
+                    questions[currentQuestionIndex].classList.remove('hidden');
+                    updateProgress();
+                }
+            });
+
+            // Переход к предыдущему вопросу
+            prevButton.addEventListener('click', () => {
+                if (currentQuestionIndex > 0) {
+                    questions[currentQuestionIndex].classList.add('hidden');
+                    currentQuestionIndex--;
+                    questions[currentQuestionIndex].classList.remove('hidden');
+                    updateProgress();
+                }
+            });
+
+            // Инициализация прогресса
+            updateProgress();
+        });
+
+        function playAudio(audioId) {
+            const audio = document.getElementById(audioId);
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play();
+            }
+        }
+
+        function finishTest(audioId) {
+            playAudio(audioId);
+            alert('Ойын аяқталды! Ары қарай қорытынды нәтиже...');
+        }
+    </script>
 </body>
 </html>

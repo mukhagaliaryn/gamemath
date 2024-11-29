@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-vpuw(=(@h97u=_w!+2_ddj@w2-370-6%7ku+i+q0oa07#u=gp4'
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
