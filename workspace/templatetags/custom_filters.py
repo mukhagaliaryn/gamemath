@@ -18,8 +18,8 @@ def first_upper(value):
 @register.filter
 def random_tailwind_color(value):
     colors = [
-        "bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500",
-        "bg-purple-500", "bg-pink-500", "bg-gray-500", "bg-indigo-500"
+        "red-500", "blue-500", "green-500", "yellow-500",
+        "purple-500", "pink-500", "gray-500", "indigo-500"
     ]
     return random.choice(colors)
 

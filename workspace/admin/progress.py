@@ -23,7 +23,7 @@ class UserAnswerTab(admin.TabularInline):
 
 
 class UserQuizAdmin(admin.ModelAdmin):
-    list_display = ('quiz_control', 'quiz', 'username', 'total_score', )
+    list_display = ('quiz_control', 'quiz', 'username', 'total_score', 'status', )
     list_filter = ('quiz_control', 'quiz', )
     inlines = (UserAnswerTab, )
 

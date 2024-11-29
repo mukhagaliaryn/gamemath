@@ -88,10 +88,9 @@
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                             </svg>
                         </div>
-                        <div>
+                        <div class="grid">
                             <h1 class="font-bold">Басталу/аяқталу уақыты</h1>
                             <span class="text-base">{{ item.date_started }}</span>
-                            <br>
                             <span class="text-base">
                                 {% if item.date_finished %}
                                     {{ item.date_finished }}
@@ -171,16 +170,15 @@
                                         <div class="relative">
                                             <div class="p-4 md:p-5 space-y-4">
                                                 {% if item.status == 'FINISHED' %}
-                                                    <div>
-                                                        
-                                                    </div>
-                                                {% else %}
                                                     <div class="grid">
                                                         {% for user_quiz in item.qc_user_quizzes.all %}
-                                                            <div class="flex items-center justify-between gap-2 py-4 border-b">
+                                                            <a 
+                                                                href="{% url 'quiz_result' user_quiz.id %}"
+                                                                class="flex items-center justify-between gap-2 p-4 border-b transition-all hover:bg-gray-100"
+                                                            >
                                                                 <div class="flex items-center gap-4">
                                                                     <div class="flex gap-2 items-center">
-                                                                        <div class="{{ ''|random_tailwind_color }} w-10 h-10 flex justify-center items-center rounded-full">
+                                                                        <div class="bg-{{ ''|random_tailwind_color }} w-10 h-10 flex justify-center items-center rounded-full">
                                                                             <span class="text-2xl font-bold">{{ user_quiz.username|first_upper }}</span>
                                                                         </div>  
                                                                         <h1 class="text-xl font-bold text-gray-900">{{ user_quiz.username }}</h1>
@@ -201,6 +199,25 @@
                                                                     <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z"/>
                                                                     </svg>
+                                                                    <span class="block text-white font-medium text-sm">{{ user_quiz.get_status_display }}</span>
+                                                                </div>
+                                                            </a>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% else %}
+                                                    <div class="grid">
+                                                        {% for user_quiz in item.qc_user_quizzes.all %}
+                                                            <div class="flex items-center justify-between gap-2 py-4 border-b">
+                                                                <div class="flex items-center gap-4">
+                                                                    <div class="flex gap-2 items-center">
+                                                                        <div class="bg-{{ ''|random_tailwind_color }} w-10 h-10 flex justify-center items-center rounded-full">
+                                                                            <span class="text-2xl font-bold">{{ user_quiz.username|first_upper }}</span>
+                                                                        </div>  
+                                                                        <h1 class="text-xl font-bold text-gray-900">{{ user_quiz.username }}</h1>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="flex gap-1 items-center py-1 px-2 rounded-lg {% if user_quiz.status == 'STARTED' %}bg-blue-500{% else %}bg-green-500{% endif %}">
                                                                     <span class="block text-white font-medium text-sm">{{ user_quiz.get_status_display }}</span>
                                                                 </div>
                                                             </div>

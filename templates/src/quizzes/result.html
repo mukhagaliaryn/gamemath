@@ -1,16 +1,79 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}
-    {{ quiz_control.quiz.title }} | GameMath
+    {{ user_quiz.quiz.title }} - Ойын нәтижесі | GameMath
 {% endblock title %}
 
 
 {% block content %}
-<div>
-    <h1>Результаты</h1>
-    <p>Пользователь: {{ user_quiz.username }}</p>
-    <p>Сессия: {{ user_quiz.session_id }}</p>
-    <p>Общий балл: {{ user_quiz.total_score }}</p>
+<div class="bg-{{ ''|random_tailwind_color }} h-screen overflow-auto">
+    <div class="max-w-screen-lg w-full grid gap-16 mx-auto py-10">
+        <div class="w-full grid gap-2 text-center">
+            <h1 class="text-4xl font-black">{{ user_quiz.quiz.title }} - ойын нәтижесі</h1>
+            
+            <div class="flex gap-2 justify-center items-center">
+                <div class="bg-{{ ''|random_tailwind_color }} w-10 h-10 flex justify-center items-center rounded-full">
+                    <span class="text-2xl font-bold text-white">{{ user_quiz.username|first_upper }}</span>
+                </div>  
+                <h1 class="text-xl font-bold">{{ user_quiz.username }}</h1>
+            </div>
+            <div>
+                <strong>Жалпы ұпай:</strong>
+                <span class="font-medium">{{ user_quiz.quiz.max_score }}/{{ user_quiz.total_score }}</span>
+            </div>
+        </div>
+    
+        <div>
+            <h2 class="text-2xl font-bold">Толығырақ айтқанда:</h2>
+            <ul class="grid gap-4">
+                {% for result in results %}
+                    <li class="relative text-gray-900 p-6 rounded-xl grid gap-4 {% if result.is_correct %}bg-green-100{% else %}bg-red-100{% endif %}">
+                        <div class="flex items-end gap-4 text-2xl font-semibold">
+                            <h1 class="text-6xl font-black">{{ forloop.counter }}</h1>
+                            <h1 class="">{{ result.question|safe }}</h1>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <div class="bg-green-200 rounded-xl p-4">
+                                <h1 class="font-bold">Дұрыс жауабы:</h1>
+                                <ul>
+                                    {% for answer in result.correct_answers %}
+                                        <li class="correct">{{ answer.option_body|safe }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div class="bg-white rounded-xl p-4">
+                                <h1 class="font-bold">Сіздің жауабыңыз:</h1>
+                                <ul>
+                                    {% for answer in result.user_answers %}
+                                        <li class="{% if answer in result.correct_answers %}correct{% else %}incorrect{% endif %}">
+                                            {{ answer.option_body|safe }}
+                                        </li>
+                                    {% empty %}
+                                        <li class="incorrect">Жауап жоқ</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="absolute top-5 right-5">
+                            {% if result.is_correct %}
+                                <svg class="w-16 h-16 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z" clip-rule="evenodd"/>
+                                </svg>
+                            {% else %}
+                                <svg class="w-16 h-16 text-red-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z" clip-rule="evenodd"/>
+                                </svg>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 </div>
 {% endblock content %}

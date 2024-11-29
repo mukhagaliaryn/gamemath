@@ -35,8 +35,8 @@
     <script>
         AOS.init();
     </script>
+    <!-- Copy link quiz control script -->
     <script>
-
         // Start quiz control
         document.addEventListener('DOMContentLoaded', () => {
             const copyButtons = document.querySelectorAll('.copy-btn');
@@ -54,6 +54,22 @@
                 });
             });
         });
+    </script>
+    <!-- Audio when click element -->
+    <script>
+        function playAudio(audioId) {
+            const audio = document.getElementById(audioId);
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play();
+            }
+        }
+
+        // Функция завершения теста с воспроизведением аудио
+        function finishTest(audioId) {
+            playAudio(audioId);
+            alert("Тест завершён!");
+        }
     </script>
 </body>
 </html>

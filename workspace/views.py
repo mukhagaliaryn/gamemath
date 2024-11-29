@@ -140,4 +140,24 @@ def quiz_test_view(request, pk, session_id):
 
 def quiz_result(request, pk):
     user_quiz = get_object_or_404(UserQuiz, id=pk)
-    return render(request, 'quizzes/result.html', {'user_quiz': user_quiz})
+    questions = user_quiz.quiz.quiz_questions.all()
+    results = []
+
+    for question in questions:
+        correct_answers = question.q_options.filter(score__gt=0)
+        user_answer = UserAnswer.objects.filter(user_quiz=user_quiz, answers__question=question).first()
+        results.append({
+            'question': question.question_body,
+            'correct_answers': correct_answers,
+            'user_answers': user_answer.answers.all() if user_answer else [],
+            'is_correct': (
+                user_answer and
+                set(user_answer.answers.values_list('id', flat=True)) == set(correct_answers.values_list('id', flat=True))
+            ),
+        })
+
+    context = {
+        'user_quiz': user_quiz,
+        'results': results,
+    }
+    return render(request, 'quizzes/result.html', context)

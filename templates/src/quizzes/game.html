@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}
     {{ quiz_control.quiz.title }} | GameMath
@@ -7,28 +8,42 @@
 
 
 {% block content %}
-<div class="bg-red-500 h-screen overflow-auto">
+<div class="bg-{{ ''|random_tailwind_color }} h-screen overflow-auto">
     {% if quiz_control.status == 'FINISHED' %}
         <div class="max-w-2xl w-full mx-auto py-20 text-center">
             <h1 class="text-6xl font-bold">Ойын аяталған!</h1>
         </div>
     {% else %}
     <div class="relative flex justify-center">
-        <div class="fixed top-5 right-10 p-6 rounded-xl bg-white text-red-500">
-            <h1 class="text-4xl font-bold">{{ quiz_control.quiz.title }}</h1>
-            <h1 class="text-xl">{{ user_quiz.username }}</h1>
+        <div class="fixed top-5 right-10 grid gap-2 p-6 rounded-xl bg-white">
+            <h1 class="text-3xl text-gray-900 font-bold">{{ quiz_control.quiz.title }}</h1>
+            <div class="flex gap-2 items-center">
+                <div class="bg-{{ ''|random_tailwind_color }} w-10 h-10 flex justify-center items-center rounded-full">
+                    <span class="text-2xl font-bold text-white">{{ user_quiz.username|first_upper }}</span>
+                </div>  
+                <h1 class="text-xl font-bold text-gray-900">{{ user_quiz.username }}</h1>
+            </div>
         </div>
 
         <form method="post" class="max-w-screen-lg w-full grid gap-16 mx-auto py-10">
             {% csrf_token %}
             {% for question in quiz_control.quiz.quiz_questions.all %}
                 <div class="grid gap-4">
-                    <h1 class="text-2xl font-semibold">{{ question.question_body|safe }}</h1>
+                    <div class="flex items-end gap-4 text-2xl font-semibold">
+                        <h1 class="text-6xl font-black text-white">{{ forloop.counter }}</h1>
+                        <h1 class="">{{ question.question_body|safe }}</h1>
+                    </div>
                     <div class="grid gap-4 grid-cols-2">
                         {% for option in question.q_options.all %}
                             <div class="flex items-center gap-2 p-6 rounded-xl bg-white">
-                                <input type="checkbox" name="question_{{ question.id }}" value="{{ option.id }}">
-                                <label class="text-red-500">
+                                <input 
+                                    id="option_{{ option.id }}" 
+                                    type="radio" value="{{ option.id }}" 
+                                    name="question_{{ question.id }}" 
+                                    class="w-8 h-8 text-orange-500 border-4 border-orange-300 focus:ring-orange-500 focus:ring-2 transition-all cursor-pointer"
+                                    onclick="playAudio('click-audio')"
+                                >
+                                <label for="option_{{ option.id }}" class="ms-2 font-medium text-gray-900 flex-1 cursor-pointer">
                                     {{ option.option_body|safe }}
                                 </label>
                             </div>
@@ -36,8 +51,16 @@
                     </div>
                 </div>
             {% endfor %}
-            <button type="submit">Отправить ответы</button>
+            <button 
+                type="submit"
+                class="fixed bottom-5 right-10 py-4 px-8 font-semibold bg-white text-gray-900 rounded-lg transition-all hover:scale-105 active:scale-95"
+                onclick="finishTest('finish-audio')"
+            >
+                Ойынды аяқтау
+            </button>
         </form>
+        <audio id="click-audio" src="{% static '/audio/option_click-1.wav' %}"></audio>
+        <audio id="finish-audio" src="{% static '/audio/option_click-2.wav' %}"></audio>
     </div>
     {% endif %}
 </div>
