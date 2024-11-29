@@ -44,6 +44,9 @@ class Question(models.Model):
     def __str__(self):
         return '#{} - {}'.format(self.pk, self.quiz)
 
+    class Meta:
+        verbose_name = _('Question')
+        verbose_name_plural = _('Questions')
 
 # Option
 class Option(models.Model):
@@ -57,3 +60,7 @@ class Option(models.Model):
 
     def __str__(self):
         return 'ID{} option belongs to ID{} question'.format(self.pk, self.question.pk)
+
+    class Meta:
+        verbose_name = _('Option')
+        verbose_name_plural = _('Options')

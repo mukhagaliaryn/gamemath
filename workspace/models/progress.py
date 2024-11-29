@@ -37,7 +37,7 @@ class QuizControl(models.Model):
                 box_size=10,
                 border=4,
             )
-            link = f'http://127.0.0.1:8000/quiz/control/{self.pk}/start/'
+            link = f'https://gamesmath.pythonanywhere.com/quiz/control/{self.pk}/start/'
             qr.add_data(link)
             qr.make(fit=True)
 
