@@ -6,7 +6,9 @@ from django.utils.translation import gettext_lazy as _
 # ----------------------------------------------------------------------------------------------------------------------
 class Quiz(models.Model):
     INTERFACE = (
-        ('DEFAULT', _('Default')),
+        ('DEFAULT', _('Quizzes')),
+        ('COOL_CARD', _('Cool card')),
+        ('MAZE', _('Maze')),
     )
 
     title = models.CharField(_('Title'), max_length=128)
