@@ -1,12 +1,13 @@
 import os
+from decouple import config
 from pathlib import Path
 from django.contrib.messages import constants as messages
 from django.utils.translation import gettext_lazy as _
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'django-insecure-vpuw(=(@h97u=_w!+2_ddj@w2-370-6%7ku+i+q0oa07#u=gp4'
-DEBUG = True
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
@@ -23,6 +24,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_tailwind',
     'django_summernote',
+    'django_cleanup.apps.CleanupConfig',
 
     'accounts.apps.AccountsConfig',
     'workspace.apps.WorkspaceConfig',

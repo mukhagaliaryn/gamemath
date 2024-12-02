@@ -3,6 +3,7 @@ bleach==6.2.0
 crispy-tailwind==1.0.3
 Django==5.1.1
 django-admin-interface==0.28.9
+django-cleanup==9.0.0
 django-colorfield==0.11.0
 django-crispy-forms==2.3
 django-js-asset==2.2.0

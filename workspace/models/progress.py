@@ -24,7 +24,7 @@ class QuizControl(models.Model):
         Quiz, on_delete=models.CASCADE,
         related_name='q_quiz_controls', verbose_name=_('Quiz')
     )
-    qr_code = models.ImageField('QR Code', upload_to='workspaces/qr_codes/', blank=True, null=True)
+    qr_code = models.ImageField('QR Code', upload_to='workspace/qr_codes/', blank=True, null=True)
     status = models.CharField(_('Status'), max_length=128, choices=STATUS, default='STARTED')
     date_started = models.DateTimeField(_('Date started'))
     date_finished = models.DateTimeField(_('Date finished'), blank=True, null=True)
