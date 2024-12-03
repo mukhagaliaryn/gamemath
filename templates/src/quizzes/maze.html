@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}
+{{ quiz_control.quiz.title }} | GameMath
+{% endblock title %}
+
+{% block content %}
+<div class="w-full h-screen z-10 overflow-hidden bg-{{ ''|random_tailwind_color }}">
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="absolute w-full h-full">
+        {% if quiz_control.status == 'FINISHED' %}
+            <div class="max-w-2xl w-full mx-auto py-20 text-center">
+                <img src="{{ quiz_control.quiz.poster.url }}" class="w-64 mx-auto mb-4 rounded-lg" alt="">
+                <h1 class="text-6xl font-bold">Ойын аяталған!</h1>
+            </div>
+        {% else %}
+            {% if user_quiz.status == 'STARTED' %}
+                <style>
+                    #player {
+                        position: absolute;
+                        width: 84px;
+                        height: 84px;
+                        top: 10px;
+                        left: 10px;
+                    }
+                </style>
+                <div class="relative">
+                    <div id="maze-container"
+                        style="background-image: url('https://static.vecteezy.com/system/resources/previews/014/572/097/non_2x/background-of-green-grass-field-cartoon-drawing-free-vector.jpg');"
+                        class="w-full h-screen bg-cover bg-center"
+                    >
+                        <!-- Player -->
+                        <div 
+                            id="player"
+                            class="z-10"    
+                        >
+                            <img 
+                                src="{% static 'images/player.png' %}" 
+                                class="w-full"
+                                alt=""
+                            >
+                        </div>
+
+                        <!-- Quizzes -->
+                        <div>
+                            {% for question in quiz_control.quiz.quiz_questions.all %}
+                                <div 
+                                    id="quiz_question"
+                                    class="absolute top-[{{ question.x_position }}%] left-[{{ question.y_position }}%]"
+                                >
+                                    <img 
+                                        src="{% static 'images/sunduk.png' %}" 
+                                        class="w-10"
+                                        alt=""
+                                    >
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Animals -->
+                        <div>
+                            <div class="absolute top-[5%] right-[10%]">
+                                <img 
+                                    src="{% static 'images/horse.png' %}" 
+                                    alt=""
+                                    class="w-20"    
+                                >
+                            </div>
+                            <div class="absolute top-[15%] right-[15%]">
+                                <img 
+                                    src="{% static 'images/horse.png' %}" 
+                                    alt=""
+                                    class="w-20"    
+                                >
+                            </div>
+                            <div class="absolute top-[13%] right-[5%]">
+                                <img 
+                                    src="{% static 'images/horse.png' %}" 
+                                    alt=""
+                                    class="w-20"    
+                                >
+                            </div>
+
+                            <div class="absolute top-[5%] right-[40%]">
+                                <img 
+                                    src="{% static 'images/ship.png' %}" 
+                                    alt=""
+                                    class="w-10"    
+                                >
+                            </div>
+                            <div class="absolute top-[5%] right-[36%]">
+                                <img 
+                                    src="{% static 'images/ship.png' %}" 
+                                    alt=""
+                                    class="w-10"    
+                                >
+                            </div>
+                            <div class="absolute top-[6%] right-[32%]">
+                                <img 
+                                    src="{% static 'images/ship.png' %}" 
+                                    alt=""
+                                    class="w-10"    
+                                >
+                            </div>
+                            <div class="absolute top-[10%] right-[43%]">
+                                <img 
+                                    src="{% static 'images/ship.png' %}" 
+                                    alt=""
+                                    class="w-10"    
+                                >
+                            </div>
+                            <div class="absolute top-[11%] right-[36%]">
+                                <img 
+                                    src="{% static 'images/ship.png' %}" 
+                                    alt=""
+                                    class="w-10"    
+                                >
+                            </div>
+                            <div class="absolute top-[15%] right-[32%]">
+                                <img 
+                                    src="{% static 'images/ship.png' %}" 
+                                    alt=""
+                                    class="w-10"    
+                                >
+                            </div>
+                        </div>
+                        
+
+                        <!-- Urts -->
+                        <div>
+                            <div class="wall absolute top-[15%] left-[50%]">
+                                <img 
+                                    src="{% static 'images/lake.png' %}" 
+                                    alt=""
+                                    class="w-90"    
+                                >
+                            </div>
+                            <div class="wall absolute bottom-[0%] right-[0%]">
+                                <img 
+                                    src="{% static 'images/urta.png' %}" 
+                                    alt=""
+                                    class="w-64"    
+                                >
+                            </div>
+                            <div class="absolute bottom-[40%] right-[10%]">
+                                <img 
+                                    src="{% static 'images/urta.png' %}" 
+                                    alt=""
+                                    class="w-64"    
+                                >
+                            </div>
+                            <div class="absolute z-20 bottom-[0%] right-[20%]">
+                                <img 
+                                    src="{% static 'images/urta.png' %}" 
+                                    alt=""
+                                    class="w-64"    
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    const player = document.getElementById("player");
+                    const mazeContainer = document.getElementById("maze-container");
+                    const walls = document.querySelectorAll(".wall");
+
+                    let playerPosition = { top: 10, left: 10 };
+                    const step = 50;
+
+                    // Проверка столкновения с препятствием
+                    function isColliding(player, wall) {
+                    const playerRect = player.getBoundingClientRect();
+                    const wallRect = wall.getBoundingClientRect();
+
+                    return !(
+                        playerRect.bottom <= wallRect.top ||
+                        playerRect.top >= wallRect.bottom ||
+                        playerRect.right <= wallRect.left ||
+                        playerRect.left >= wallRect.right
+                    );
+                    }
+
+                    // Обновление позиции игрока
+                    function movePlayer(top, left) {
+                    const newTop = playerPosition.top + top;
+                    const newLeft = playerPosition.left + left;
+
+                    // Проверяем границы лабиринта
+                    if (
+                        newTop >= 0 &&
+                        newLeft >= 0 &&
+                        newTop + player.offsetHeight <= mazeContainer.offsetHeight &&
+                        newLeft + player.offsetWidth <= mazeContainer.offsetWidth
+                    ) {
+                        // Временно перемещаем игрока для проверки столкновения
+                        player.style.top = newTop + "px";
+                        player.style.left = newLeft + "px";
+
+                        for (const wall of walls) {
+                        if (isColliding(player, wall)) {
+                            // Возвращаем игрока на исходное место, если столкновение
+                            player.style.top = playerPosition.top + "px";
+                            player.style.left = playerPosition.left + "px";
+                            return;
+                        }
+                        }
+
+                        // Если столкновений нет, сохраняем новую позицию
+                        playerPosition = { top: newTop, left: newLeft };
+                    }
+                    }
+
+                    // Управление с клавиатуры
+                    document.addEventListener("keydown", (event) => {
+                    switch (event.key) {
+                        case "ArrowUp":
+                        movePlayer(-step, 0);
+                        break;
+                        case "ArrowDown":
+                        movePlayer(step, 0);
+                        break;
+                        case "ArrowLeft":
+                        movePlayer(0, -step);
+                        break;
+                        case "ArrowRight":
+                        movePlayer(0, step);
+                        break;
+                    }
+                    });
+
+                </script>
+            {% else %}
+                <h1 class="text-6xl font-bold">Сіз ойын аятадыңыз!</h1>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

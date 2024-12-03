@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 class Quiz(models.Model):
     INTERFACE = (
         ('DEFAULT', _('Quizzes')),
-        ('COOL_CARD', _('Cool card')),
         ('MAZE', _('Maze')),
     )
 
@@ -42,6 +41,8 @@ class Question(models.Model):
         _('Question type'), max_length=128,
         choices=QUESTION_TYPE, default='SIMPLE'
     )
+    x_position = models.PositiveIntegerField(_('X'), blank=True, null=True)
+    y_position = models.PositiveIntegerField(_('Y'), blank=True, null=True)
 
     def __str__(self):
         return '#{} - {}'.format(self.pk, self.quiz)

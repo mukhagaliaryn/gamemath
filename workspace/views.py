@@ -4,9 +4,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from workspace.models import Quiz, QuizControl, UserQuiz, UserAnswer, Option
 import uuid
+import random
 
 
 # Home page
+# ----------------------------------------------------------------------------------------------------------------------
 @login_required(login_url='/accounts/login/')
 def home_view(request):
     user = request.user
@@ -18,6 +20,7 @@ def home_view(request):
 
 
 # Quizzes
+# ----------------------------------------------------------------------------------------------------------------------
 @login_required(login_url='/accounts/login/')
 def quizzes_view(request):
     quizzes = Quiz.objects.all()
@@ -31,7 +34,17 @@ def quizzes_view(request):
     return render(request, 'quizzes/index.html', context)
 
 
-# create quiz
+# QuizControl view
+# ----------------------------------------------------------------------------------------------------------------------
+@login_required(login_url='/accounts/login/')
+def quiz_control_detail_view(request, pk):
+    quiz_control = get_object_or_404(QuizControl, pk=pk)
+    context = {
+        'quiz_control': quiz_control,
+    }
+    return render(request, 'quizzes/detail.html', context)
+
+
 @login_required
 def create_quiz_control(request):
     if request.method == 'POST':
@@ -53,6 +66,7 @@ def create_quiz_control(request):
     return redirect('quizzes')
 
 
+# ----------------------------------------------------------------------------------------------------------------------
 @login_required
 def finish_quiz_control(request, pk):
     quiz_control = get_object_or_404(QuizControl, pk=pk, user=request.user)
@@ -80,17 +94,7 @@ def delete_quiz_control(request, pk):
     return redirect('home')
 
 
-# Quiz detail
-@login_required(login_url='/accounts/login/')
-def quiz_control_detail_view(request, pk):
-    quiz_control = get_object_or_404(QuizControl, pk=pk)
-    context = {
-        'quiz_control': quiz_control,
-    }
-    return render(request, 'quizzes/detail.html', context)
-
-
-# Quiz control game
+# QuizControl game
 # ----------------------------------------------------------------------------------------------------------------------
 def start_quiz_session(request, pk):
     quiz_control = get_object_or_404(QuizControl, id=pk)
@@ -109,7 +113,7 @@ def start_quiz_session(request, pk):
 
     return render(request, 'quizzes/start.html', {'quiz_control': quiz_control})
 
-
+# ----------------------------------------------------------------------------------------------------------------------
 def quiz_test_view(request, pk, session_id):
     quiz_control = get_object_or_404(QuizControl, id=pk)
     user_quiz = get_object_or_404(UserQuiz, quiz_control=quiz_control, session_id=session_id)
@@ -127,17 +131,26 @@ def quiz_test_view(request, pk, session_id):
         user_quiz.total_score = sum(answer.score for answer in user_quiz.uq_answers.all())
         user_quiz.status = 'FINISHED'
         user_quiz.save()
-
         return redirect('quiz_result', pk=user_quiz.id)
+
+    questions = quiz_control.quiz.quiz_questions.all()
+    for question in questions:
+        question.x_position = random.randint(10, 90)  # От 10% до 90%
+        question.y_position = random.randint(10, 90)  # От 10% до 90%
+        question.save()
 
     context = {
         'quiz_control': quiz_control,
         'user_quiz': user_quiz,
         'questions': quiz_control.quiz.quiz_questions.all(),
     }
-    return render(request, 'quizzes/game.html', context)
+    if user_quiz.quiz.interface == 'MAZE':
+        return render(request, 'quizzes/maze.html', context)
+    else:
+        return render(request, 'quizzes/game.html', context)
 
 
+# ----------------------------------------------------------------------------------------------------------------------
 def quiz_result(request, pk):
     user_quiz = get_object_or_404(UserQuiz, id=pk)
     questions = user_quiz.quiz.quiz_questions.all()
