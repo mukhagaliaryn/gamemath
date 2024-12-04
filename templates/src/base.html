@@ -65,6 +65,36 @@
             }
         }
     </style>
+    <style>
+        #player {
+            position: absolute;
+            width: 84px;
+            height: 84px;
+            top: 10px;
+            left: 10px;
+            transition: top 0.1s ease, left 0.1s ease;
+        }
+
+        #player img {
+            object-fit: contain;
+            animation: player-bounce 1s infinite;
+        }
+
+        @keyframes player-bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .highlight {
+            transform: scale(1.5);
+            cursor: pointer;
+            transition: all .3s;
+        }
+    </style>
 </head>
 
 <body class="font-fira bg-amber-400 text-white text-base xl:text-lg 2xl:text-xl">
@@ -76,6 +106,7 @@
     <script>
         AOS.init();
     </script>
+    <!-- Home page -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const copyButtons = document.querySelectorAll('.copy-btn');
@@ -94,20 +125,8 @@
             });
         });
     </script>
-    <script>
-        function playAudio(audioId) {
-            const audio = document.getElementById(audioId);
-            if (audio) {
-                audio.currentTime = 0;
-                audio.play();
-            }
-        }
 
-        function finishTest(audioId) {
-            playAudio(audioId);
-            alert("Тест завершён!");
-        }
-    </script>
+    <!-- Quiz page -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const questions = document.querySelectorAll('.question');
@@ -161,6 +180,174 @@
             playAudio(audioId);
             alert('Ойын аяқталды! Ары қарай қорытынды нәтиже...');
         }
+    </script>
+
+    <!-- Maze page -->
+    <script>
+        const player = document.getElementById("player");
+        const quizQuestions = document.querySelectorAll(".quiz-question");
+        const mazeContainer = document.getElementById("maze-container");
+        const objects = document.querySelectorAll(".object");
+        
+        const stepSound = document.getElementById("step-sound");
+        const chestSound = document.getElementById("chest-sound"); 
+        const sheepSound = document.getElementById("sheep-sound"); 
+        const horseSound = document.getElementById("horse-sound"); 
+        const waterSound = document.getElementById("water-sound"); 
+
+        let activeChest = null;
+        let activeObject = null;
+
+        let playerPosition = { top: 10, left: 10 };
+        const step = 50;
+
+
+        function isColliding(rect1, rect2) {
+            return !(
+                rect1.bottom <= rect2.top ||
+                rect1.top >= rect2.bottom ||
+                rect1.right <= rect2.left ||
+                rect1.left >= rect2.right
+            );
+        }
+
+        
+        function movePlayer(top, left) {
+            const currentTop = parseInt(player.style.top || "10");
+            const currentLeft = parseInt(player.style.left || "10");
+
+            const playerHeight = player.offsetHeight;
+            const playerWidth = player.offsetWidth;
+            const containerHeight = mazeContainer.offsetHeight;
+            const containerWidth = mazeContainer.offsetWidth;
+
+            const newTop = currentTop + top;
+            const newLeft = currentLeft + left;
+
+            if (newTop >= 0 && newTop + playerHeight <= containerHeight) {
+                player.style.top = `${newTop}px`;
+                playerPosition.top = newTop;
+            }
+
+            if (newLeft >= 0 && newLeft + playerWidth <= containerWidth) {
+                player.style.left = `${newLeft}px`;
+                playerPosition.left = newLeft;
+            }
+
+            checkChestCollision();
+            playStepSound();
+        }
+
+        function playStepSound() {
+            stepSound.currentTime = 0; 
+            stepSound.play();
+        }
+
+        function checkChestCollision() {
+            const playerRect = player.getBoundingClientRect();
+            let foundChest = null;
+            let foundObject = null;
+
+            quizQuestions.forEach((chest) => {
+                const chestRect = chest.getBoundingClientRect();
+                const chestImage = chest.querySelector(".chest-image");
+
+                if (isColliding(playerRect, chestRect)) {
+                    foundChest = chest;
+                    chestImage.src = chest.dataset.openSrc;
+                    chest.classList.add("highlight");
+                    playChestSound()
+                } else {
+                    chest.classList.remove("highlight");
+                }
+            });
+
+            objects.forEach((object) => {
+                const objectRect = object.getBoundingClientRect();
+                if (isColliding(playerRect, objectRect)) {
+                    foundObject = object;
+
+                    if (object !== activeObject) {
+                        playObjectSound(object);
+                    }
+                }
+            });
+          
+            activeChest = foundChest;
+            activeObject = foundObject;
+        }
+
+        function playChestSound() {
+            chestSound.currentTime = 0;
+            chestSound.play();
+        }
+
+
+        function playObjectSound(object) {
+            if (object.classList.contains("sheep")) {
+                sheepSound.currentTime = 0;
+                sheepSound.play();
+            } else if (object.classList.contains("horse")) {
+                horseSound.currentTime = 0;
+                horseSound.play();
+            } else if (object.classList.contains("water")) {
+                waterSound.currentTime = 0;
+                waterSound.play();
+            }
+        }
+
+
+        function openModal(chest) {
+            const chestId = chest.getAttribute("id").split("_")[2];
+            const modal = document.getElementById(`modal_${chestId}`);
+            modal.classList.remove("hidden");
+
+            mazeContainer.classList.add("no-interaction");
+
+            const closeModalButtons = modal.querySelectorAll(".close-modal");
+            closeModalButtons.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    closeModal(modal);
+                });
+            });
+        }
+
+        function closeModal(modal) {
+            modal.classList.add("hidden");
+            mazeContainer.classList.remove("no-interaction");
+        }
+
+
+        document.addEventListener("keydown", (event) => {
+            switch (event.key) {
+                case "ArrowUp":
+                    movePlayer(-step, 0);
+                    break;
+                case "ArrowDown":
+                    movePlayer(step, 0);
+                    break;
+                case "ArrowLeft":
+                    movePlayer(0, -step);
+                    break;
+                case "ArrowRight":
+                    movePlayer(0, step);
+                    break;
+                case "Enter": 
+                    if (activeChest) {
+                        openModal(activeChest);
+                    }
+                    break;
+            }
+        });
+
+
+        quizQuestions.forEach((chest) => {
+            chest.addEventListener("click", () => {
+                if (chest === activeChest) {
+                    openModal(chest);
+                }
+            });
+        });
     </script>
 </body>
 </html>

@@ -16,32 +16,41 @@
         <div class="bubble"></div>
     </div>
 
-    <div class="absolute w-full h-full">
+    <div class="absolute w-full h-full overflow-hidden">
         {% if quiz_control.status == 'FINISHED' %}
             <div class="max-w-2xl w-full mx-auto py-20 text-center">
-                <img src="{{ quiz_control.quiz.poster.url }}" class="w-64 mx-auto mb-4 rounded-lg" alt="">
                 <h1 class="text-6xl font-bold">Ойын аяталған!</h1>
             </div>
         {% else %}
             {% if user_quiz.status == 'STARTED' %}
-                <style>
-                    #player {
-                        position: absolute;
-                        width: 84px;
-                        height: 84px;
-                        top: 10px;
-                        left: 10px;
-                    }
-                </style>
                 <div class="relative">
                     <div id="maze-container"
                         style="background-image: url('https://static.vecteezy.com/system/resources/previews/014/572/097/non_2x/background-of-green-grass-field-cartoon-drawing-free-vector.jpg');"
                         class="w-full h-screen bg-cover bg-center"
                     >
+                        <!-- Stones -->
+                        <div 
+                            class="absolute top-[20%] left-[0%]"
+                        >
+                            <img 
+                                src="{% static 'images/stone.png' %}" alt=""
+                                class="w-80"    
+                            >
+                        </div>
+                        <div 
+                            class="absolute bottom-[20%] left-[0%]"
+                        >
+                            <img 
+                                src="{% static 'images/stone.png' %}" alt=""
+                                class="w-80"    
+                            >
+                        </div>
+
+
                         <!-- Player -->
                         <div 
                             id="player"
-                            class="z-10"    
+                            class="z-20"    
                         >
                             <img 
                                 src="{% static 'images/player.png' %}" 
@@ -51,38 +60,88 @@
                         </div>
 
                         <!-- Quizzes -->
-                        <div>
+                        <form method="post">
+                            {% csrf_token %}
                             {% for question in quiz_control.quiz.quiz_questions.all %}
                                 <div 
-                                    id="quiz_question"
-                                    class="absolute top-[{{ question.x_position }}%] left-[{{ question.y_position }}%]"
+                                    id="quiz_question_{{ question.id }}"
+                                    class="quiz-question absolute z-10 top-[{{ question.x_position }}%] left-[{{ question.y_position }}%]"
+                                    data-closed-src="{% static 'images/sunduk.png' %}"
+                                    data-open-src="{% static 'images/open-sunduk.png' %}"
                                 >
                                     <img 
                                         src="{% static 'images/sunduk.png' %}" 
-                                        class="w-10"
-                                        alt=""
+                                        class="chest-image w-10"
+                                        alt="Chest"
                                     >
                                 </div>
-                            {% endfor %}
-                        </div>
 
+                                <div id="modal_{{ question.id }}" class="modal hidden fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                                    <div class="bg-white grid gap-5 p-10 rounded-lg max-w-screen-md w-full">
+                                        <div class="px-4 grid gap-4">
+                                            <div class="flex items-center justify-center gap-4 text-2xl font-semibold">
+                                                <div class="py-6 px-10 rounded-2xl bg-orange-500">
+                                                    <h1 class="text-6xl font-black">{{ forloop.counter }}</h1>
+                                                </div>
+                                                <h1 class="text-4xl text-gray-900">{{ question.question_body|safe }}</h1>
+                                            </div>
+                                            <div class="grid gap-4 lg:grid-cols-2 mt-4">
+                                                {% for option in question.q_options.all %}
+                                                    <div class="flex items-center gap-2 p-6 rounded-xl bg-white shadow-md hover:bg-gray-50 transition-all">
+                                                        <input 
+                                                            id="option_{{ option.id }}" 
+                                                            type="radio" 
+                                                            value="{{ option.id }}" 
+                                                            name="question_{{ question.id }}"
+                                                            required 
+                                                            class="w-8 h-8 text-orange-500 border-4 border-orange-300 focus:ring-orange-500 focus:ring-2 transition-all cursor-pointer"
+                                                            onclick="playAudio('click-audio')"
+                                                        >
+                                                        <label for="option_{{ option.id }}" class="ms-2 font-medium text-gray-900 flex-1 cursor-pointer">
+                                                            {{ option.option_body|safe }}
+                                                        </label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <span
+                                            class="close-modal cursor-pointer text-center bg-orange-500 px-4 py-2 font-medium rounded-lg"
+                                        >
+                                            Белгілеп шығу
+                                        </span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <button 
+                                type="submit"
+                                id="finish-btn"
+                                
+                                class="py-4 px-8 absolute bottom-5 left-5 font-semibold bg-orange-500 text-white rounded-lg transition-all hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                                onclick="finishTest('finish-audio')"
+                                disabled
+                            >
+                                Аяқтау
+                            </button>
+                        </form>
+
+                        <!-- Urts, Animals, Walls (остались без изменений) -->
                         <!-- Animals -->
                         <div>
-                            <div class="absolute top-[5%] right-[10%]">
+                            <div class="object horse absolute top-[5%] right-[10%]">
                                 <img 
                                     src="{% static 'images/horse.png' %}" 
                                     alt=""
                                     class="w-20"    
                                 >
                             </div>
-                            <div class="absolute top-[15%] right-[15%]">
+                            <div class="object horse absolute top-[15%] right-[15%]">
                                 <img 
                                     src="{% static 'images/horse.png' %}" 
                                     alt=""
                                     class="w-20"    
                                 >
                             </div>
-                            <div class="absolute top-[13%] right-[5%]">
+                            <div class="object horse absolute top-[13%] right-[5%]">
                                 <img 
                                     src="{% static 'images/horse.png' %}" 
                                     alt=""
@@ -90,42 +149,42 @@
                                 >
                             </div>
 
-                            <div class="absolute top-[5%] right-[40%]">
+                            <div class="object sheep absolute top-[5%] right-[40%]">
                                 <img 
                                     src="{% static 'images/ship.png' %}" 
                                     alt=""
                                     class="w-10"    
                                 >
                             </div>
-                            <div class="absolute top-[5%] right-[36%]">
+                            <div class="object sheep absolute top-[5%] right-[36%]">
                                 <img 
                                     src="{% static 'images/ship.png' %}" 
                                     alt=""
                                     class="w-10"    
                                 >
                             </div>
-                            <div class="absolute top-[6%] right-[32%]">
+                            <div class="object sheep absolute top-[6%] right-[32%]">
                                 <img 
                                     src="{% static 'images/ship.png' %}" 
                                     alt=""
                                     class="w-10"    
                                 >
                             </div>
-                            <div class="absolute top-[10%] right-[43%]">
+                            <div class="object sheep absolute top-[10%] right-[43%]">
                                 <img 
                                     src="{% static 'images/ship.png' %}" 
                                     alt=""
                                     class="w-10"    
                                 >
                             </div>
-                            <div class="absolute top-[11%] right-[36%]">
+                            <div class="object sheep absolute top-[11%] right-[36%]">
                                 <img 
                                     src="{% static 'images/ship.png' %}" 
                                     alt=""
                                     class="w-10"    
                                 >
                             </div>
-                            <div class="absolute top-[15%] right-[32%]">
+                            <div class="object sheep absolute top-[15%] right-[32%]">
                                 <img 
                                     src="{% static 'images/ship.png' %}" 
                                     alt=""
@@ -137,14 +196,49 @@
 
                         <!-- Urts -->
                         <div>
-                            <div class="wall absolute top-[15%] left-[50%]">
+                            <!-- Lake -->
+                            <div class="object water absolute top-[15%] left-[50%]">
                                 <img 
                                     src="{% static 'images/lake.png' %}" 
                                     alt=""
                                     class="w-90"    
                                 >
                             </div>
-                            <div class="wall absolute bottom-[0%] right-[0%]">
+
+                            <div class="object water absolute bottom-[0%] left-[10%]">
+                                <img 
+                                    src="{% static 'images/lake.png' %}" 
+                                    alt=""
+                                    class="w-90"    
+                                >
+                            </div>
+
+
+                            <div class="absolute bottom-[35%] right-[45%]">
+                                <img 
+                                    src="{% static 'images/mens.png' %}" 
+                                    alt=""
+                                    class="w-8"    
+                                >
+                            </div>
+                            <div class="absolute bottom-[35%] right-[40%]">
+                                <img 
+                                    src="{% static 'images/kids.png' %}" 
+                                    alt=""
+                                    class="w-8"    
+                                >
+                            </div>
+
+
+                            <!-- Urts -->
+                            <div class="absolute bottom-[40%] right-[50%]">
+                                <img 
+                                    src="{% static 'images/urta.png' %}" 
+                                    alt=""
+                                    class="w-64"    
+                                >
+                            </div>
+                            <div class="absolute bottom-[0%] right-[0%]">
                                 <img 
                                     src="{% static 'images/urta.png' %}" 
                                     alt=""
@@ -158,7 +252,7 @@
                                     class="w-64"    
                                 >
                             </div>
-                            <div class="absolute z-20 bottom-[0%] right-[20%]">
+                            <div class="absolute z-20 bottom-[-6%] right-[20%]">
                                 <img 
                                     src="{% static 'images/urta.png' %}" 
                                     alt=""
@@ -166,78 +260,42 @@
                                 >
                             </div>
                         </div>
+
+                        <!-- Аудиофайлы -->
+                        <audio id="click-audio" src="{% static 'audio/option_click-1.wav' %}"></audio>
+                        <audio id="step-sound" src="{% static 'audio/step.mp3' %}"></audio>
+                        <audio id="chest-sound" src="{% static 'audio/chest-open.mp3' %}"></audio>
+                        
+                        <audio id="sheep-sound" src="{% static 'audio/sheep.mp3' %}"></audio>
+                        <audio id="horse-sound" src="{% static 'audio/horse.mp3' %}"></audio>
+                        <audio id="water-sound" src="{% static 'audio/water.mp3' %}"></audio>
+                        
+                        <audio id="finish-audio" src="{% static 'audio/finish.mp3' %}"></audio>
                     </div>
                 </div>
 
                 <script>
-                    const player = document.getElementById("player");
-                    const mazeContainer = document.getElementById("maze-container");
-                    const walls = document.querySelectorAll(".wall");
+                    document.addEventListener("DOMContentLoaded", () => {
+                        const finishButton = document.getElementById("finish-btn");
+                        const form = document.querySelector("form");
 
-                    let playerPosition = { top: 10, left: 10 };
-                    const step = 50;
-
-                    // Проверка столкновения с препятствием
-                    function isColliding(player, wall) {
-                    const playerRect = player.getBoundingClientRect();
-                    const wallRect = wall.getBoundingClientRect();
-
-                    return !(
-                        playerRect.bottom <= wallRect.top ||
-                        playerRect.top >= wallRect.bottom ||
-                        playerRect.right <= wallRect.left ||
-                        playerRect.left >= wallRect.right
-                    );
-                    }
-
-                    // Обновление позиции игрока
-                    function movePlayer(top, left) {
-                    const newTop = playerPosition.top + top;
-                    const newLeft = playerPosition.left + left;
-
-                    // Проверяем границы лабиринта
-                    if (
-                        newTop >= 0 &&
-                        newLeft >= 0 &&
-                        newTop + player.offsetHeight <= mazeContainer.offsetHeight &&
-                        newLeft + player.offsetWidth <= mazeContainer.offsetWidth
-                    ) {
-                        // Временно перемещаем игрока для проверки столкновения
-                        player.style.top = newTop + "px";
-                        player.style.left = newLeft + "px";
-
-                        for (const wall of walls) {
-                        if (isColliding(player, wall)) {
-                            // Возвращаем игрока на исходное место, если столкновение
-                            player.style.top = playerPosition.top + "px";
-                            player.style.left = playerPosition.left + "px";
-                            return;
-                        }
+                        // Проверяем состояние всех input с атрибутом required
+                        function checkFormCompletion() {
+                            const isFormValid = form.checkValidity(); // Проверяет все required поля
+                            if (isFormValid) {
+                                finishButton.disabled = false;
+                                finishButton.classList.remove("bg-orange-300", "text-gray-500", "cursor-not-allowed");
+                                finishButton.classList.add("bg-orange-500", "text-white", "hover:bg-orange-600");
+                            } else {
+                                finishButton.disabled = true;
+                                finishButton.classList.add("bg-orange-300", "text-gray-500", "cursor-not-allowed");
+                                finishButton.classList.remove("bg-orange-500", "text-white", "hover:bg-orange-600");
+                            }
                         }
 
-                        // Если столкновений нет, сохраняем новую позицию
-                        playerPosition = { top: newTop, left: newLeft };
-                    }
-                    }
-
-                    // Управление с клавиатуры
-                    document.addEventListener("keydown", (event) => {
-                    switch (event.key) {
-                        case "ArrowUp":
-                        movePlayer(-step, 0);
-                        break;
-                        case "ArrowDown":
-                        movePlayer(step, 0);
-                        break;
-                        case "ArrowLeft":
-                        movePlayer(0, -step);
-                        break;
-                        case "ArrowRight":
-                        movePlayer(0, step);
-                        break;
-                    }
+                        // Отслеживаем изменения в форме
+                        form.addEventListener("input", checkFormCompletion);
                     });
-
                 </script>
             {% else %}
                 <h1 class="text-6xl font-bold">Сіз ойын аятадыңыз!</h1>
