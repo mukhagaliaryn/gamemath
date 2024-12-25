@@ -15,7 +15,8 @@
         <h1 class="mb-2 font-extrabold text-2xl sm:text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl">
             Сізді көргенімізге қуаныштымыз
             <span class="text-transparent bg-clip-text bg-gradient-to-r to-orange-600 from-red-600">
-                {{ request.user.full_name }}
+                {{ request.user.first_name }}
+                {{ request.user.last_name }}
             </span> 
         </h1>
     </div>
@@ -58,12 +59,15 @@
             <h1 class="text-xl md:text-2xl lg:text-3xl font-extrabold">Таңдалып алынған ойындар</h1>
         </div>
         <div class="grid gap-2 overflow-x-auto">
-            {% for item in user.u_quiz_controls.all %}
+            {% for item in user.quiz_controls.all %}
                 <div class="min-w-[1024px] flex items-center justify-between gap-2 rounded-xl p-4 bg-orange-500">
                     <!-- Overview -->
                     <div class="flex items-start gap-4 xl:w-full xl:max-w-sm 2xl:max-w-md">
                         <a href="{% url 'quiz_control_detail' item.id %}">
-                            <img src="{{ item.quiz.poster.url }}" class="w-24 rounded-lg transition-all hover:scale-105" alt="">
+                            <img 
+                                src="{% if item.quiz.poster %}{{ item.quiz.poster.url }}{% else %}{% static 'images/poster.png' %}{% endif %}" 
+                                class="w-24 rounded-lg transition-all hover:scale-105" alt=""
+                            >
                         </a>
                         <div class="flex flex-col items-start gap-1">
                             <a href="{% url 'quiz_control_detail' item.id %}">
@@ -104,7 +108,7 @@
                     <!-- Status -->
                     <div class="flex gap-2 items-center">
                         <div>
-                            {% if item.status == 'FINISHED' %}
+                            {% if item.status == 'finished' %}
                                 <svg class="w-8 h-8 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M13.09 3.294c1.924.95 3.422 1.69 5.472.692a1 1 0 0 1 1.438.9v9.54a1 1 0 0 1-.562.9c-2.981 1.45-5.382.24-7.25-.701a38.739 38.739 0 0 0-.622-.31c-1.033-.497-1.887-.812-2.756-.77-.76.036-1.672.357-2.81 1.396V21a1 1 0 1 1-2 0V4.971a1 1 0 0 1 .297-.71c1.522-1.506 2.967-2.185 4.417-2.255 1.407-.068 2.653.453 3.72.967.225.108.443.216.655.32Z"/>
                                 </svg>
@@ -129,7 +133,7 @@
                         </div>
                         <div>
                             <h1 class="font-bold">Қатысушылар</h1>
-                            <span>{{ item.qc_user_quizzes.all.count }}</span>
+                            <span>{{ item.user_quizzes.all.count }}</span>
                         </div>
                     </div>
 
@@ -169,9 +173,9 @@
                                         </div>
                                         <div class="relative">
                                             <div class="p-4 md:p-5 space-y-4">
-                                                {% if item.status == 'FINISHED' %}
+                                                {% if item.status == 'finished' %}
                                                     <div class="grid">
-                                                        {% for user_quiz in item.qc_user_quizzes.all %}
+                                                        {% for user_quiz in item.user_quizzes.all %}
                                                             <a 
                                                                 href="{% url 'quiz_result' user_quiz.id %}"
                                                                 target="_blank"
@@ -207,7 +211,7 @@
                                                     </div>
                                                 {% else %}
                                                     <div class="grid">
-                                                        {% for user_quiz in item.qc_user_quizzes.all %}
+                                                        {% for user_quiz in item.user_quizzes.all %}
                                                             <div class="flex items-center justify-between gap-2 py-4 border-b">
                                                                 <div class="flex items-center gap-4">
                                                                     <div class="flex gap-2 items-center">
@@ -304,7 +308,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        {% if item.status != 'FINISHED' %}
+                                        {% if item.status != 'finished' %}
                                             <div class="p-4 md:p-5 space-y-4">
                                                 <h1 class="text-gray-900 text-2xl font-bold">Ойынды аяқтау</h1>
                                                 <div class="">

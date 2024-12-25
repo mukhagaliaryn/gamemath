@@ -1,10 +1,14 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+
 from workspace.models import Quiz, QuizControl, UserQuiz, UserAnswer, Option
 import uuid
 import random
+import json
 
 
 # Home page
@@ -15,11 +19,10 @@ def home_view(request):
     context = {
         'user_profile': user,
     }
-
     return render(request, 'index.html', context)
 
 
-# Quizzes
+# Quizzes page
 # ----------------------------------------------------------------------------------------------------------------------
 @login_required(login_url='/accounts/login/')
 def quizzes_view(request):
@@ -34,7 +37,7 @@ def quizzes_view(request):
     return render(request, 'quizzes/index.html', context)
 
 
-# QuizControl view
+# Quiz control page
 # ----------------------------------------------------------------------------------------------------------------------
 @login_required(login_url='/accounts/login/')
 def quiz_control_detail_view(request, pk):
@@ -45,6 +48,7 @@ def quiz_control_detail_view(request, pk):
     return render(request, 'quizzes/detail.html', context)
 
 
+# ----------------------------------------------------------------------------------------------------------------------
 @login_required
 def create_quiz_control(request):
     if request.method == 'POST':
@@ -58,7 +62,7 @@ def create_quiz_control(request):
         QuizControl.objects.create(
             user=request.user,
             quiz=quiz,
-            status='STARTED',
+            status='started',
             date_started=timezone.now(),
         )
         messages.success(request, f'"{quiz.title}" ойыны іске қосылды қосылды!')
@@ -75,13 +79,14 @@ def finish_quiz_control(request, pk):
         messages.warning(request, 'Бұл ойын аяқталып қойған!')
         return redirect('home')
 
-    quiz_control.status = 'FINISHED'
+    quiz_control.status = 'finished'
     quiz_control.date_finished = timezone.now()
     quiz_control.save()
     messages.warning(request, 'Ойын аяқталды!')
     return redirect('home')
 
 
+# ----------------------------------------------------------------------------------------------------------------------
 @login_required
 def delete_quiz_control(request, pk):
     quiz_control = get_object_or_404(QuizControl, pk=pk, user=request.user)
@@ -94,7 +99,7 @@ def delete_quiz_control(request, pk):
     return redirect('home')
 
 
-# QuizControl game
+# Start quiz page
 # ----------------------------------------------------------------------------------------------------------------------
 def start_quiz_session(request, pk):
     quiz_control = get_object_or_404(QuizControl, id=pk)
@@ -113,51 +118,80 @@ def start_quiz_session(request, pk):
 
     return render(request, 'quizzes/start.html', {'quiz_control': quiz_control})
 
+
+# Quiz game page
 # ----------------------------------------------------------------------------------------------------------------------
+@csrf_exempt
 def quiz_test_view(request, pk, session_id):
     quiz_control = get_object_or_404(QuizControl, id=pk)
     user_quiz = get_object_or_404(UserQuiz, quiz_control=quiz_control, session_id=session_id)
 
-    if request.method == 'POST':
-        questions = quiz_control.quiz.quiz_questions.all()
-        for question in questions:
-            answer_ids = request.POST.getlist(f'question_{question.id}')
-            if answer_ids:
-                user_answer, _ = UserAnswer.objects.get_or_create(user_quiz=user_quiz, score=0)
-                user_answer.answers.set(Option.objects.filter(id__in=answer_ids))
-                user_answer.score = sum(option.score for option in user_answer.answers.all())
-                user_answer.save()
+    if request.method == 'GET' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        questions = []
+        for question in quiz_control.quiz.questions.all():
+            options = Option.objects.filter(question=question)
+            questions.append({
+                "id": question.id,
+                "question_body": question.question_body,
+                "options": [
+                    {
+                        "id": option.id,
+                        "option_body": option.option_body,
+                        "is_correct": option.is_correct,
+                        "score": option.score
+                    } for option in options]
+            })
 
-        user_quiz.total_score = sum(answer.score for answer in user_quiz.uq_answers.all())
-        user_quiz.status = 'FINISHED'
-        user_quiz.save()
-        return redirect('quiz_result', pk=user_quiz.id)
+        data = {
+            "quiz_id": quiz_control.id,
+            "title": quiz_control.quiz.title,
+            "session_id": session_id,
+            "questions": questions
+        }
+        return JsonResponse(data)
 
-    questions = quiz_control.quiz.quiz_questions.all()
-    for question in questions:
-        question.x_position = random.randint(10, 90)  # От 10% до 90%
-        question.y_position = random.randint(10, 90)  # От 10% до 90%
-        question.save()
+    if request.method == 'POST' and request.headers.get('Content-Type') == 'application/json':
+        try:
+            data = json.loads(request.body)
+            answers = data.get('answers', [])
+            for answer in answers:
+                question_id = answer.get('question_id')
+                answer_ids = answer.get('selected_option_ids', [])
 
+                if question_id and answer_ids:
+                    question = quiz_control.quiz.questions.get(id=question_id)
+                    user_answer = UserAnswer.objects.create(user_quiz=user_quiz)
+                    user_answer.answers.set(Option.objects.filter(id__in=answer_ids))
+                    user_answer.score = sum(option.score for option in user_answer.answers.all())
+                    user_answer.save()
+
+            user_quiz.total_score = sum(answer.score for answer in user_quiz.user_answers.all())
+            user_quiz.status = 'finished'
+            user_quiz.save()
+
+            return JsonResponse({"status": "success", "total_score": user_quiz.total_score})
+
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON format"}, status=400)
+
+    template_name = f"quizzes/games/{user_quiz.quiz.interface.slug}.html"
     context = {
         'quiz_control': quiz_control,
         'user_quiz': user_quiz,
-        'questions': quiz_control.quiz.quiz_questions.all(),
+        'questions': quiz_control.quiz.questions.all(),
     }
-    if user_quiz.quiz.interface == 'MAZE':
-        return render(request, 'quizzes/maze.html', context)
-    else:
-        return render(request, 'quizzes/game.html', context)
+    return render(request, template_name, context)
 
 
+# Quiz result page
 # ----------------------------------------------------------------------------------------------------------------------
 def quiz_result(request, pk):
     user_quiz = get_object_or_404(UserQuiz, id=pk)
-    questions = user_quiz.quiz.quiz_questions.all()
+    questions = user_quiz.quiz.questions.all()
     results = []
 
     for question in questions:
-        correct_answers = question.q_options.filter(score__gt=0)
+        correct_answers = question.options.filter(score__gt=0)
         user_answer = UserAnswer.objects.filter(user_quiz=user_quiz, answers__question=question).first()
         results.append({
             'question': question.question_body,

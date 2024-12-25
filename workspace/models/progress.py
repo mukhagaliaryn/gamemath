@@ -13,21 +13,21 @@ import uuid
 # ----------------------------------------------------------------------------------------------------------------------
 class QuizControl(models.Model):
     STATUS = (
-        ('STARTED', _('Started')),
-        ('FINISHED', _('Finished')),
+        ('started', _('Басталды')),
+        ('finished', _('Аяқталды')),
     )
     user = models.ForeignKey(
         User, on_delete=models.CASCADE,
-        related_name='u_quiz_controls', verbose_name=_('User')
+        related_name='quiz_controls', verbose_name=_('Қолданушы')
     )
     quiz = models.ForeignKey(
         Quiz, on_delete=models.CASCADE,
-        related_name='q_quiz_controls', verbose_name=_('Quiz')
+        related_name='quiz_controls', verbose_name=_('Ойын тесті')
     )
-    qr_code = models.ImageField('QR Code', upload_to='workspace/qr_codes/', blank=True, null=True)
-    status = models.CharField(_('Status'), max_length=128, choices=STATUS, default='STARTED')
-    date_started = models.DateTimeField(_('Date started'))
-    date_finished = models.DateTimeField(_('Date finished'), blank=True, null=True)
+    qr_code = models.ImageField('QR код', upload_to='workspace/qr_codes/', blank=True, null=True)
+    status = models.CharField(_('Статус'), max_length=128, choices=STATUS, default='started')
+    date_started = models.DateTimeField(_('Басталған уақыт'))
+    date_finished = models.DateTimeField(_('Аяқталған уақыт'), blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.qr_code:
@@ -50,52 +50,52 @@ class QuizControl(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return 'Quiz control: {} - {}'.format(self.user, self.quiz)
+        return 'Тест бақылау: {} - {}'.format(self.user, self.quiz)
 
     class Meta:
-        verbose_name = _('QuizControl')
-        verbose_name_plural = _('QuizControls')
+        verbose_name = _('Тест бақылау')
+        verbose_name_plural = _('Тест бақылаулар')
 
 
 # UserQuiz
 class UserQuiz(models.Model):
     STATUS = (
-        ('STARTED', _('Started')),
-        ('FINISHED', _('Finished')),
+        ('started', _('Басталды')),
+        ('finished', _('Аяқталды')),
     )
     quiz_control = models.ForeignKey(
         QuizControl, on_delete=models.CASCADE,
-        related_name='qc_user_quizzes', verbose_name=_('QuizControl')
+        related_name='user_quizzes', verbose_name=_('Тест бақылау')
     )
     quiz = models.ForeignKey(
         Quiz, on_delete=models.CASCADE,
-        related_name='q_user_quizzes', verbose_name=_('Quiz')
+        related_name='user_quizzes', verbose_name=_('Ойын тесті')
     )
-    username = models.CharField(_('Username'), max_length=128)
-    session_id = models.UUIDField(_('Session ID'), default=uuid.uuid4, unique=True)
-    total_score = models.PositiveSmallIntegerField(_('Total score'), default=0)
-    status = models.CharField(_('Status'), max_length=128, choices=STATUS, default='STARTED')
+    username = models.CharField(_('Қолданушы аты-жөні'), max_length=128)
+    session_id = models.UUIDField(_('Сессия ID'), default=uuid.uuid4, unique=True)
+    total_score = models.PositiveSmallIntegerField(_('Жалпы балл'), default=0)
+    status = models.CharField(_('Статус'), max_length=128, choices=STATUS, default='started')
 
     def __str__(self):
-        return 'Quiz control: {} | User quiz: {} - {}'.format(self.quiz_control, self.username, self.quiz)
+        return 'Тест бақылау: {} | Қолданушының тесті: {} - {}'.format(self.quiz_control, self.username, self.quiz)
 
     class Meta:
-        verbose_name = _('UserQuiz')
-        verbose_name_plural = _('UserQuizzes')
+        verbose_name = _('Қолданушының тесті')
+        verbose_name_plural = _('Қолданушылардың тесттері')
 
 
 
 class UserAnswer(models.Model):
     user_quiz = models.ForeignKey(
         UserQuiz, on_delete=models.CASCADE,
-        related_name='uq_answers', verbose_name=_('UserQuiz')
+        related_name='user_answers', verbose_name=_('Қолданушының тесті')
     )
-    answers = models.ManyToManyField(Option, verbose_name=_('Answer'))
-    score = models.PositiveSmallIntegerField(_('Score'), default=0)
+    answers = models.ManyToManyField(Option, verbose_name=_('Жауаптар'))
+    score = models.PositiveSmallIntegerField(_('Балл'), default=0)
 
     def __str__(self):
-        return '{} answer {}'.format(self.user_quiz, self.pk)
+        return 'Қолданушының тесті: {} жауап ID:{}'.format(self.user_quiz, self.pk)
 
     class Meta:
-        verbose_name = _('UserAnswer')
-        verbose_name_plural = _('UserAnswers')
+        verbose_name = _('Қолданушының жауабы')
+        verbose_name_plural = _('Қолданушылардың жауаптары')

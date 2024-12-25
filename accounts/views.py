@@ -1,5 +1,5 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView as BasePasswordChangeView
 from django.urls import reverse_lazy
 from .forms import UserForm, ProfileUpdateForm
 from django.views.generic import DetailView
@@ -14,6 +14,7 @@ class SignUpView(CreateView):
     template_name = 'accounts/signup.html'
 
 
+# Profile pages
 class ProfileView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'accounts/profile.html'
@@ -50,7 +51,7 @@ class ProfileDeleteView(LoginRequiredMixin, DeleteView):
         return self.request.user
 
 
-class CustomPasswordChangeView(PasswordChangeView):
+class PasswordChangeView(BasePasswordChangeView):
     template_name = 'accounts/password_change.html'
     success_url = reverse_lazy('profile')
 

@@ -6,21 +6,21 @@ from .models import User
 
 class UserAdmin(UserModelAdmin):
     model = User
-    list_display = ('email', 'username', 'full_name', 'is_staff', 'is_superuser', 'is_active', 'date_joined')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_superuser', 'is_active', 'date_joined')
     list_filter = ('is_staff', 'is_active')
-    search_fields = ('email', 'username', 'full_name')
+    search_fields = ('username', 'email', 'first_name', 'last_name',)
     ordering = ('email',)
 
     fieldsets = (
-        (None, {'fields': ('avatar', 'email', 'username', 'full_name', 'account_type', 'password')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
+        (None, {'fields': ('avatar', 'username', 'email', 'first_name', 'last_name', 'password')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login',)}),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'username', 'full_name', 'password1', 'password2', 'is_staff', 'is_active')}
+            'fields': ('username', 'email', 'first_name', 'last_name', 'password1', 'password2',)}
         ),
     )
 

@@ -10,8 +10,8 @@
 <div>
     <div class="w-full block bg-orange-500 rounded-lg">
         <div class="flex flex-col items-center p-10">
-            <img class="w-48 h-48 mb-3 rounded-full shadow-lg" src="{% if user.profile.avatar %}{{ user_profile.avatar.url }}{% else %}{% static '/images/user.png'%}{% endif %}" alt="Bonnie image" />
-            <h2 class="text-4xl font-bold">{{ user_profile.full_name }}</h2>
+            <img class="w-48 h-48 mb-3 rounded-full shadow-lg" src="{% if user_profile.avatar %}{{ user_profile.avatar.url }}{% else %}{% static '/images/user.png'%}{% endif %}" alt="Bonnie image" />
+            <h2 class="text-4xl font-bold">{{ user_profile.first_name }} {{ user_profile.last_name }}</h2>
             <span class="text-xl">{{ user_profile.username }}</span>
             <a href="#" class="font-medium text-xl underline">
                 {{ user_profile.email }}
