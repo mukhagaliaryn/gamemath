@@ -3,6 +3,21 @@ from django.utils.translation import gettext_lazy as _
 
 
 # GameType
+class Category(models.Model):
+    name = models.CharField(_('Атауы'), max_length=128)
+    slug = models.SlugField(_('Кілттік сөз'), max_length=128, unique=True)
+    order = models.PositiveSmallIntegerField(_('Реттілік номері'), default=0)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('Категория')
+        verbose_name_plural = _('Категориялар')
+        ordering = ('order', )
+
+
+# GameType
 class Interface(models.Model):
     name = models.CharField(_('Атауы'), max_length=128)
     slug = models.SlugField(_('Кілттік сөз'), max_length=128, unique=True)
@@ -20,7 +35,18 @@ class Interface(models.Model):
 # Quiz
 # ----------------------------------------------------------------------------------------------------------------------
 class Quiz(models.Model):
+    GAME_TYPE = (
+        (
+            ()
+        )
+    )
+
     title = models.CharField(_('Тақырыбы'), max_length=128)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE,
+        related_name='quizzes', verbose_name=_('Категория'),
+
+    )
     interface = models.ForeignKey(
         Interface, on_delete=models.CASCADE,
         related_name='quizzes', verbose_name=_('Интерфейс'),
@@ -57,7 +83,7 @@ class Question(models.Model):
     order = models.PositiveSmallIntegerField(_('Реттілік номері'), default=0)
 
     def __str__(self):
-        return '#{} - {}'.format(self.pk, self.quiz)
+        return '{}: {} - сұрақ'.format(self.quiz.title, self.order)
 
     class Meta:
         verbose_name = _('Сұрақ')

@@ -1,6 +1,10 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin, SummernoteModelAdminMixin
-from workspace.models import Question, Quiz, Option, Interface
+from workspace.models import Category, Question, Quiz, Option, Interface
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'order', )
 
 
 class InterfaceAdmin(admin.ModelAdmin):
@@ -29,11 +33,11 @@ class OptionTab(SummernoteModelAdminMixin, admin.TabularInline, ):
 
 
 class QuestionAdmin(SummernoteModelAdmin):
-    list_display = ('pk', 'quiz', 'question_type', )
     list_filter = ('quiz', 'question_type', )
     inlines = (OptionTab, )
 
 
 admin.site.register(Interface, InterfaceAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question, QuestionAdmin)

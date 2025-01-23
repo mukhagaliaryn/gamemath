@@ -1,0 +1,54 @@
+{% extends 'layouts/games.html' %}
+{% load static %}
+
+{% block title %}
+{{ quiz_control.quiz.title }} | GameMath
+{% endblock title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/escape_room.css' %}">
+{% endblock extra_css %}
+
+{% block game_content %}
+<div class="relative w-full h-full bg-white flex flex-col">
+    <!-- Head -->
+    <div id="head" class="h-28 bg-amber-400">
+        <div class="h-24 bg-amber-300"></div>
+    </div>
+
+    <!-- Wall -->
+    <div id="wall" class="bg-amber-300 flex-1">
+        
+        <!-- TV -->
+        <div id="tv" class="w-72">
+            <img 
+                src="{% static 'games/escape_room/tv-table.png' %}" alt=""
+                class="w-full"    
+            >
+        </div>
+
+        <!-- Door -->
+        <div id="door" class="w-72">
+            <img 
+                src="{% static 'games/escape_room/door.png' %}" alt=""
+                class="w-full"    
+            >
+        </div>
+
+
+    </div>
+
+    <!-- footer -->
+    <div id="footer" class="h-80 bg-orange-500">
+        <div class="h-12 bg-orange-400">
+
+        </div>
+    </div>
+</div>
+
+{% endblock game_content %}
+
+{% block extra_js %}
+<script src="{% static 'scripts/games.js' %}"></script>
+<script src="{% static 'scripts/escape_room.js' %}"></script>
+{% endblock extra_js %}

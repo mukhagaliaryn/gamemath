@@ -29,49 +29,20 @@
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
 
     <!-- Styles -->
-    <style>
-        #player {
-            position: absolute;
-            width: 84px;
-            height: 84px;
-            top: 10px;
-            left: 10px;
-            transition: top 0.1s ease, left 0.1s ease;
-        }
-
-        #player img {
-            object-fit: contain;
-            animation: player-bounce 1s infinite;
-        }
-
-        @keyframes player-bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-5px);
-            }
-        }
-
-        .highlight {
-            transform: scale(1.5);
-            cursor: pointer;
-            transition: all .3s;
-        }
-    </style>
+    {% block extra_css %}
+    {% endblock extra_css %}
 </head>
 
 <body class="font-fira bg-amber-400 text-white text-base xl:text-lg 2xl:text-xl">
-    {% block content %}
-    {% endblock content %}
-
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
 
     <!-- Scripts -->
-    <script>
-        AOS.init();
-    </script>
+    {% block extra_js %}
+    {% endblock extra_js %}
     
-    <!-- Home page -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const copyButtons = document.querySelectorAll('.copy-btn');
@@ -89,6 +60,10 @@
                 });
             });
         });
+    </script>
+
+    <script>
+        AOS.init();
     </script>
 </body>
 </html>

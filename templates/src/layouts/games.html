@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+
+{% block content %}
+<div class="w-full h-screen overflow-hidden bg-{{ ''|random_tailwind_color }}">
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="absolute w-full h-full flex justify-center items-center">
+        {% if quiz_control.status == 'finished' %}
+            <div class="grid gap-4 text-center">
+                <img src="{% static 'images/logo.png' %}" class="w-64 mx-auto" alt="">
+                <h1 class="text-6xl font-bold">Сіз ойынды аятадыңыз!</h1>
+            </div>
+        {% else %}
+            <div class="w-full h-full">
+                {% if user_quiz.status == 'started' %}
+                <input type="hidden" id="quiz-id" value="{{ quiz_control.id }}">
+                <input type="hidden" id="user-quiz-id" value="{{ user_quiz.id }}">
+                <input type="hidden" id="session-id" value="{{ user_quiz.session_id }}">
+                <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+
+                {% block game_content %}
+                {% endblock game_content %}
+
+                {% else %}
+                    <div class="grid gap-4 text-center">
+                        <img src="{% static 'images/logo.png' %}" class="w-64 mx-auto" alt="">
+                        <h1 class="text-6xl font-bold">Сіз ойынды аятадыңыз!</h1>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

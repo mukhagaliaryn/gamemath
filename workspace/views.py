@@ -4,8 +4,7 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
-
-from workspace.models import Quiz, QuizControl, UserQuiz, UserAnswer, Option
+from workspace.models import Quiz, QuizControl, UserQuiz, UserAnswer, Option, Category
 import uuid
 import random
 import json
@@ -22,19 +21,33 @@ def home_view(request):
     return render(request, 'index.html', context)
 
 
+# Categories page
+# ----------------------------------------------------------------------------------------------------------------------
+@login_required(login_url='/accounts/login/')
+def categories_view(request):
+    items = Category.objects.all()
+    context = {
+        'categories': items,
+    }
+
+    return render(request, 'categories/index.html', context)
+
+
 # Quizzes page
 # ----------------------------------------------------------------------------------------------------------------------
 @login_required(login_url='/accounts/login/')
-def quizzes_view(request):
+def category_detail_view(request, slug):
+    item = get_object_or_404(Category, slug=slug)
     quizzes = Quiz.objects.all()
     quiz_controls = QuizControl.objects.filter(user=request.user)
     quizzes_with_controls = {qc.quiz_id: qc.id for qc in quiz_controls}
     context = {
+        'item': item,
         'quizzes': quizzes,
         'quizzes_with_controls': quizzes_with_controls,
     }
 
-    return render(request, 'quizzes/index.html', context)
+    return render(request, 'categories/category_detail.html', context)
 
 
 # Quiz control page
@@ -45,10 +58,10 @@ def quiz_control_detail_view(request, pk):
     context = {
         'quiz_control': quiz_control,
     }
-    return render(request, 'quizzes/detail.html', context)
+    return render(request, 'quiz/index.html', context)
 
 
-# ----------------------------------------------------------------------------------------------------------------------
+# create quiz control
 @login_required
 def create_quiz_control(request):
     if request.method == 'POST':
@@ -70,11 +83,10 @@ def create_quiz_control(request):
     return redirect('quizzes')
 
 
-# ----------------------------------------------------------------------------------------------------------------------
+# Finish quiz control
 @login_required
 def finish_quiz_control(request, pk):
     quiz_control = get_object_or_404(QuizControl, pk=pk, user=request.user)
-
     if quiz_control.status == 'FINISHED':
         messages.warning(request, 'Бұл ойын аяқталып қойған!')
         return redirect('home')
@@ -86,11 +98,10 @@ def finish_quiz_control(request, pk):
     return redirect('home')
 
 
-# ----------------------------------------------------------------------------------------------------------------------
+# Delete quiz control
 @login_required
 def delete_quiz_control(request, pk):
     quiz_control = get_object_or_404(QuizControl, pk=pk, user=request.user)
-
     if request.method == 'POST':
         quiz_control.delete()
         messages.success(request, 'Таңдалған ойын өшірілді')
@@ -103,7 +114,6 @@ def delete_quiz_control(request, pk):
 # ----------------------------------------------------------------------------------------------------------------------
 def start_quiz_session(request, pk):
     quiz_control = get_object_or_404(QuizControl, id=pk)
-
     if request.method == 'POST':
         session_id = uuid.uuid4()
 
@@ -116,7 +126,7 @@ def start_quiz_session(request, pk):
         )
         return redirect('quiz_test_view', pk=pk, session_id=session_id)
 
-    return render(request, 'quizzes/start.html', {'quiz_control': quiz_control})
+    return render(request, 'quiz/start.html', {'quiz_control': quiz_control})
 
 
 # Quiz game page
@@ -132,6 +142,7 @@ def quiz_test_view(request, pk, session_id):
             options = Option.objects.filter(question=question)
             questions.append({
                 "id": question.id,
+                'order': question.order,
                 "question_body": question.question_body,
                 "options": [
                     {
@@ -174,7 +185,7 @@ def quiz_test_view(request, pk, session_id):
         except json.JSONDecodeError:
             return JsonResponse({"status": "error", "message": "Invalid JSON format"}, status=400)
 
-    template_name = f"quizzes/games/{user_quiz.quiz.interface.slug}.html"
+    template_name = f"quiz/games/{user_quiz.quiz.interface.slug}.html"
     context = {
         'quiz_control': quiz_control,
         'user_quiz': user_quiz,
@@ -207,4 +218,4 @@ def quiz_result(request, pk):
         'user_quiz': user_quiz,
         'results': results,
     }
-    return render(request, 'quizzes/result.html', context)
+    return render(request, 'quiz/result.html', context)

@@ -34,7 +34,7 @@
             </p>
             <div>
                 <a
-                    href="{% url 'quizzes' %}"
+                    href="{% url 'categories' %}"
                     class="inline-flex gap-2 items-center justify-center px-4 py-2 font-medium text-center text-orange-500 bg-white rounded-lg transition-all hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
                 >
                     <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -278,7 +278,37 @@
                                                 <span class="sr-only">Close modal</span>
                                             </button>
                                         </div>
-                                        <div class="p-4 md:p-5 space-y-4 border-b">
+
+                                        {% if item.status != 'finished' %}
+                                            <div class="p-4 md:p-5 space-y-4">
+                                                <h1 class="text-gray-900 text-2xl font-bold">Ойынды аяқтау</h1>
+                                                <div class="">
+                                                    <p class="leading-relaxed text-gray-500">
+                                                        "{{ item.quiz.title }}" ойынды аяқтауды қалайсыз ба?
+                                                    </p>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <form method="post" action="{% url 'finish_quiz_control' item.id %}">
+                                                        {% csrf_token %}
+                                                        <button 
+                                                            type="submit"
+                                                            class="focus:outline-none text-white bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-xl px-5 py-2.5 mt-2 mb-2"
+                                                        >
+                                                            Ойынды аятау
+                                                        </button>
+                                                    </form>
+                                                    <button 
+                                                        data-modal-hide="setting-modal-{{ item.id }}" 
+                                                        type="button" 
+                                                        class="py-2.5 px-5 ms-3 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-orange-500 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                                                    >
+                                                        Кері қайту
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+
+                                        <div class="p-4 md:p-5 space-y-4 border-t">
                                             <h1 class="text-gray-900 text-2xl font-bold">Ойынды өшіру</h1>
                                             <div class="">
                                                 <p class="leading-relaxed text-gray-500">
@@ -308,34 +338,6 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        {% if item.status != 'finished' %}
-                                            <div class="p-4 md:p-5 space-y-4">
-                                                <h1 class="text-gray-900 text-2xl font-bold">Ойынды аяқтау</h1>
-                                                <div class="">
-                                                    <p class="leading-relaxed text-gray-500">
-                                                        "{{ item.quiz.title }}" ойынды аяқтауды қалайсыз ба?
-                                                    </p>
-                                                </div>
-                                                <div class="flex items-center">
-                                                    <form method="post" action="{% url 'finish_quiz_control' item.id %}">
-                                                        {% csrf_token %}
-                                                        <button 
-                                                            type="submit"
-                                                            class="focus:outline-none text-white bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-xl px-5 py-2.5 mt-2 mb-2"
-                                                        >
-                                                            Ойынды аятау
-                                                        </button>
-                                                    </form>
-                                                    <button 
-                                                        data-modal-hide="setting-modal-{{ item.id }}" 
-                                                        type="button" 
-                                                        class="py-2.5 px-5 ms-3 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-orange-500 focus:z-10 focus:ring-4 focus:ring-gray-100"
-                                                    >
-                                                        Кері қайту
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
