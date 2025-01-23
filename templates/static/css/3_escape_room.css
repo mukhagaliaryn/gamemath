@@ -1,0 +1,75 @@
+/* ==============================
+   Жалпы бөлме стилі
+============================== */
+.object {
+    cursor: pointer;
+    transition: all .3s;
+}
+
+.object:hover {
+    transform: scale(1.1);
+}
+
+
+#lamp {
+    position: absolute;
+    top: 5%;
+    right: 50%;
+}
+
+#tv {
+    position: absolute;
+    bottom: 230px;
+    right: 45%;
+}
+
+#door {
+    position: absolute;
+    bottom: 270px;
+    right: 10%;
+}
+
+#library {
+    position: absolute;
+    top: 30%;
+    left: 25%;
+}
+
+
+#drawer {
+    position: absolute;
+    bottom: 25%;
+    left: 15%;
+}
+
+#table-lamp {
+    position: absolute;
+    top: 49%;
+    left: 20%;
+}
+
+#sofa {
+    position: absolute;
+    bottom: 4%;
+    left: 59%;
+}
+
+
+#sofa2 {
+    position: absolute;
+    bottom: 5%;
+    left: 20%;
+}
+
+#round-table {
+    position: absolute;
+    bottom: 4%;
+    left: 44%;
+}
+
+
+#pot {
+    position: absolute;
+    bottom: 18%;
+    left: 48%;
+}

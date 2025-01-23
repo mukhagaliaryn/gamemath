@@ -38,7 +38,7 @@ def categories_view(request):
 @login_required(login_url='/accounts/login/')
 def category_detail_view(request, slug):
     item = get_object_or_404(Category, slug=slug)
-    quizzes = Quiz.objects.all()
+    quizzes = Quiz.objects.filter(category=item)
     quiz_controls = QuizControl.objects.filter(user=request.user)
     quizzes_with_controls = {qc.quiz_id: qc.id for qc in quiz_controls}
     context = {

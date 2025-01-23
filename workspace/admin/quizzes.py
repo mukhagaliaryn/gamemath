@@ -19,7 +19,7 @@ class QuestionTab(SummernoteModelAdminMixin, admin.StackedInline, ):
 
 
 class QuizAdmin(SummernoteModelAdmin):
-    list_display = ('title', 'interface', )
+    list_display = ('title', 'interface', 'category', )
     list_filter = ('interface', )
 
     inlines = (QuestionTab, )

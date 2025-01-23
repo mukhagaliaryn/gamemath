@@ -6,21 +6,31 @@
 {% endblock title %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/escape_room.css' %}">
+    <link rel="stylesheet" href="{% static 'css/3_escape_room.css' %}">
 {% endblock extra_css %}
 
 {% block game_content %}
 <div class="relative w-full h-full bg-white flex flex-col">
     <!-- Head -->
-    <div id="head" class="h-28 bg-amber-400">
-        <div class="h-24 bg-amber-300"></div>
+    <div id="head" class="h-28 bg-orange-400">
+        <div class="h-24 bg-orange-500"></div>
     </div>
 
     <!-- Wall -->
     <div id="wall" class="bg-amber-300 flex-1">
         
-        <!-- TV -->
-        <div id="tv" class="w-72">
+        <!-- First layer -->
+        <!-- ========================================================================================= -->
+        <!-- Lamp -->
+        <div id="lamp" class="w-24">
+            <img 
+                src="{% static 'games/escape_room/lamp.png' %}" alt=""
+                class="w-full"    
+            >
+        </div>
+
+         <!-- TV -->
+        <div id="tv" class="object w-72">
             <img 
                 src="{% static 'games/escape_room/tv-table.png' %}" alt=""
                 class="w-full"    
@@ -28,20 +38,80 @@
         </div>
 
         <!-- Door -->
-        <div id="door" class="w-72">
+        <div id="door" class="object w-72">
             <img 
                 src="{% static 'games/escape_room/door.png' %}" alt=""
                 class="w-full"    
             >
         </div>
 
+        <!-- Library -->
+        <div id="library" class="object w-24 flex gap-2">
+            <img 
+                src="{% static 'games/escape_room/library.png' %}" alt=""
+                class="w-full"    
+            >
+            <img 
+                src="{% static 'games/escape_room/library.png' %}" alt=""
+                class="w-full"    
+            >
+        </div>
 
+
+        <!-- drawer -->
+        <div id="drawer" class="object w-48">
+            <img 
+                src="{% static 'games/escape_room/drawer.png' %}" alt=""
+                class="w-full"    
+            >
+        </div>
+
+        <!-- table lamp -->
+        <div id="table-lamp" class="object w-16">
+            <img 
+                src="{% static 'games/escape_room/table-lamp.png' %}" alt=""
+                class="w-full"    
+            >
+        </div>
+
+        <!-- Second layer -->
+        <!-- ====================================================================================== -->
+        <!-- Sofa -->
+        <div id="sofa" class="object w-96">
+            <img 
+                src="{% static 'games/escape_room/sofa.png' %}" alt=""
+                class="w-full"    
+            >
+        </div>
+
+        <!-- Sofa2 -->
+        <div id="sofa2" class="object w-64">
+            <img 
+                src="{% static 'games/escape_room/sofa-2.png' %}" alt=""
+                class="w-full"    
+            >
+        </div>
+
+        <!-- round-table -->
+        <div id="round-table" class="w-48">
+            <img 
+                src="{% static 'games/escape_room/round-table.png' %}" alt=""
+                class="w-full"    
+            >
+        </div>
+
+        <!-- pot -->
+        <div id="pot" class="object w-12">
+            <img 
+                src="{% static 'games/escape_room/pot.png' %}" alt=""
+                class="w-full"    
+            >
+        </div>
     </div>
 
     <!-- footer -->
     <div id="footer" class="h-80 bg-orange-500">
         <div class="h-12 bg-orange-400">
-
         </div>
     </div>
 </div>
@@ -49,6 +119,6 @@
 {% endblock game_content %}
 
 {% block extra_js %}
-<script src="{% static 'scripts/games.js' %}"></script>
-<script src="{% static 'scripts/escape_room.js' %}"></script>
+    <script src="{% static 'scripts/games.js' %}"></script>
+    <script src="{% static 'scripts/3_escape_room.js' %}"></script>
 {% endblock extra_js %}
