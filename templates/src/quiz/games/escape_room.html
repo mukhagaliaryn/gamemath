@@ -12,8 +12,12 @@
 {% block game_content %}
 <div class="relative w-full h-full bg-white flex flex-col">
     <!-- Head -->
-    <div id="head" class="h-28 bg-orange-400">
+    <div id="head" class="relative h-28 bg-orange-400">
         <div class="h-24 bg-orange-500"></div>
+
+        <div id="timer" class="absolute top-[20%] right-[5%] text-2xl font-bold text-red-600 p-2 rounded-lg bg-white/50">
+            03:00
+        </div>
     </div>
 
     <!-- Wall -->
@@ -37,14 +41,6 @@
             >
         </div>
 
-        <!-- Door -->
-        <div id="door" class="object w-72">
-            <img 
-                src="{% static 'games/escape_room/door.png' %}" alt=""
-                class="w-full"    
-            >
-        </div>
-
         <!-- Library -->
         <div id="library" class="object w-24 flex gap-2">
             <img 
@@ -58,7 +54,7 @@
         </div>
 
 
-        <!-- drawer -->
+        <!-- Drawer -->
         <div id="drawer" class="object w-48">
             <img 
                 src="{% static 'games/escape_room/drawer.png' %}" alt=""
@@ -66,8 +62,8 @@
             >
         </div>
 
-        <!-- table lamp -->
-        <div id="table-lamp" class="object w-16">
+        <!-- Table lamp -->
+        <div id="table_lamp" class="object w-16">
             <img 
                 src="{% static 'games/escape_room/table-lamp.png' %}" alt=""
                 class="w-full"    
@@ -77,7 +73,7 @@
         <!-- Second layer -->
         <!-- ====================================================================================== -->
         <!-- Sofa -->
-        <div id="sofa" class="object w-96">
+        <div id="sofa" class="w-96">
             <img 
                 src="{% static 'games/escape_room/sofa.png' %}" alt=""
                 class="w-full"    
@@ -85,7 +81,7 @@
         </div>
 
         <!-- Sofa2 -->
-        <div id="sofa2" class="object w-64">
+        <div id="sofa2" class="w-64">
             <img 
                 src="{% static 'games/escape_room/sofa-2.png' %}" alt=""
                 class="w-full"    
@@ -107,6 +103,39 @@
                 class="w-full"    
             >
         </div>
+
+
+        <!-- Modal -->
+        <div id="modal" class="w-full h-full top-0 left-0 fixed bg-black/50 z-50 hidden justify-center items-center">
+            <div id="close-modal" class="absolute top-5 right-5 p-2 rounded-lg bg-white hover:bg-gray-100 cursor-pointer">
+                <svg class="w-4 h-4 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                </svg>
+            </div>
+
+            <div class="max-w-screen-lg w-full bg-white rounded-xl p-6">
+                <div id="modal-content" class="text-gray-900"></div>
+            </div>
+        </div>
+
+        <!-- Door -->
+        <div id="door" class="w-72">
+            <img 
+                src="{% static 'games/escape_room/door.png' %}" alt=""
+                class="w-full"    
+            >
+
+            <div id="lock" class="absolute top-[45%] left-[42%] p-2 rounded-full bg-white/50 cursor-pointer">
+                <svg class="w-12 h-12 text-blue-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M8 10V7a4 4 0 1 1 8 0v3h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h1Zm2-3a2 2 0 1 1 4 0v3h-4V7Zm2 6a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+            <div id="key" class="hidden absolute top-[45%] left-[42%] p-2 rounded-full bg-white/50 cursor-pointer">
+                <svg class="w-12 h-12 text-green-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M15 7a2 2 0 1 1 4 0v4a1 1 0 1 0 2 0V7a4 4 0 0 0-8 0v3H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2V7Zm-5 6a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+        </div>
     </div>
 
     <!-- footer -->
@@ -114,6 +143,10 @@
         <div class="h-12 bg-orange-400">
         </div>
     </div>
+
+    <audio id="click-audio" src="{% static 'audio/option_click-1.wav' %}"></audio>
+    <audio id="chest-sound" src="{% static 'audio/chest-open.mp3' %}"></audio>
+    <audio id="finish-audio" src="{% static 'audio/finish.mp3' %}"></audio>
 </div>
 
 {% endblock game_content %}
