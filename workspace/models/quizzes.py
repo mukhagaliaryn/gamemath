@@ -19,6 +19,11 @@ class Category(models.Model):
 
 # GameType
 class Interface(models.Model):
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE,
+        related_name='interfaces', verbose_name=_('Категория'), null=True, blank=True
+
+    )
     name = models.CharField(_('Атауы'), max_length=128)
     slug = models.SlugField(_('Кілттік сөз'), max_length=128, unique=True)
     order = models.PositiveSmallIntegerField(_('Реттілік номері'), default=0)
@@ -35,12 +40,6 @@ class Interface(models.Model):
 # Quiz
 # ----------------------------------------------------------------------------------------------------------------------
 class Quiz(models.Model):
-    GAME_TYPE = (
-        (
-            ()
-        )
-    )
-
     title = models.CharField(_('Тақырыбы'), max_length=128)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE,

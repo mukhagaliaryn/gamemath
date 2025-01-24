@@ -1,0 +1,61 @@
+#ship {
+    position: absolute;
+    width: 84px;
+    height: 84px;
+    top: 10px;
+    left: 10px;
+    transition: all .5s;
+}
+
+#player img {
+    object-fit: contain;
+    animation: player-bounce 1s infinite;
+}
+
+@keyframes player-bounce {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+
+.highlight {
+    transform: scale(1.2);
+    cursor: pointer;
+    transition: all .3s;
+}
+
+
+.whale:nth-child(1) {
+    transition: all .3s;
+    animation: whale-animate 5s infinite;
+}
+
+.whale:nth-child(2) {
+    transition: all .3s;
+    animation: whale-animate 8s infinite;
+}
+
+.whale:nth-child(3) {
+    transition: all .3s;
+    animation: whale-animate 11s infinite;
+}
+
+
+@keyframes whale-animate {
+    0%,
+    100% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: translateX(20px);
+        opacity: 1;
+    }
+}

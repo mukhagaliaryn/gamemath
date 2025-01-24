@@ -8,8 +8,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class InterfaceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'order', )
-
+    list_display = ('name', 'category', 'slug', 'order', )
+    list_filter = ('category', )
 
 # Quiz
 # ----------------------------------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@ class QuestionTab(SummernoteModelAdminMixin, admin.StackedInline, ):
 
 
 class QuizAdmin(SummernoteModelAdmin):
-    list_display = ('title', 'interface', 'category', )
+    list_display = ('title', 'interface', 'category', 'order', )
     list_filter = ('interface', )
 
     inlines = (QuestionTab, )
