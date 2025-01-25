@@ -29,7 +29,7 @@ class Interface(models.Model):
     order = models.PositiveSmallIntegerField(_('Реттілік номері'), default=0)
 
     def __str__(self):
-        return self.name
+        return f'{self.category.name}. {self.name}'
 
     class Meta:
         verbose_name = _('Интерфейс')
