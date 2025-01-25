@@ -55,8 +55,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Тыңдаушы: тышқанды басу
             document.addEventListener('click', (event) => {
                 questions.forEach(({ element, data }) => {
-                    const questionRect = element.getBoundingClientRect();
-
                     // Тышқан элементке бағытталған ба
                     if (event.target === element.querySelector('img')) {
                         // Модалды ашу

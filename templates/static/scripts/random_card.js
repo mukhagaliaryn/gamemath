@@ -78,28 +78,43 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                     <h1 class="text-2xl font-semibold text-gray-900">${question.question_body}</h1>
                 </div>
-                <div class="grid gap-4 lg:grid-cols-2 mt-4">
-                    ${question.options.map(opt => `
-                        <div class="flex items-center gap-2 p-6 rounded-xl bg-white shadow-md hover:bg-gray-50 transition-all">
-                            <input
-                                type="radio"
-                                id="option_${opt.id}"
-                                name="question_${question.id}"
-                                value="${opt.id}"
-                                class="w-8 h-8 text-orange-500 border-4 border-orange-300 focus:ring-orange-500 focus:ring-2 transition-all cursor-pointer"
-                                onclick="playAudio('click-audio')"
-                            >
-                            <label
-                                for="option_${opt.id}"
-                                class="ms-2 font-medium text-gray-900 flex-1 cursor-pointer"
-                            >
-                                ${opt.option_body}
-                            </label>
+                <div class="grid grid-cols-4 gap-4 mt-4">
+                    ${question.options.map((opt, i) => `
+                        <div 
+                            class="card h-80 relative rounded-xl bg-white shadow-md hover:bg-gray-50 transition-all cursor-pointer"
+                        >
+                            <div class="card-front absolute w-full h-full flex justify-center items-center text-4xl text-gray-900 font-bold">
+                                <img src="/static/games/random_card/qa.png" class="w-24">
+                            </div>
+                            <div class="card-back absolute w-full h-full absolute flex items-center p-6">
+                                <label
+                                    class="ms-2 font-medium text-gray-900 flex-1"
+                                >
+                                    ${opt.option_body}
+                                </label>
+
+                                <input
+                                    type="radio"
+                                    id="option_${opt.id}"
+                                    name="question_${question.id}"
+                                    value="${opt.id}"
+                                    class="absolute bottom-5 right-5 z-50 w-8 h-8 text-orange-500 border-4 border-orange-300 focus:ring-orange-500 focus:ring-2 transition-all cursor-pointer"
+                                    onclick="playAudio('click-audio')"
+                                >
+                            </div>
                         </div>
                     `).join('')}
                 </div>
             </div>
         `;
+
+        const cards = document.querySelectorAll(".card");
+        cards.forEach(card => {
+            card.addEventListener("click", () => {
+                playAudio("next-audio");
+                card.classList.add("opened")
+            })
+        })
 
         const stored = answers.find(a => a.question_id === question.id);
         if (stored) {

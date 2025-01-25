@@ -1,31 +1,18 @@
-#player {
-    position: absolute;
-    width: 84px;
-    height: 84px;
-    top: 10px;
-    left: 10px;
-    transition: top 0.1s ease, left 0.1s ease;
+
+.card {
+    transform-style: preserve-3d;
+    transform: rotateY(0);
 }
 
-#player img {
-    object-fit: contain;
-    animation: player-bounce 1s infinite;
+.opened {
+    transform: rotateY(180deg);
 }
 
-@keyframes player-bounce {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-5px);
-    }
+.card-front,
+.card-back {
+    backface-visibility: hidden;
 }
 
-.highlight {
-    transform: scale(1.2);
-    cursor: pointer;
-    transition: all .3s;
+.card-back {
+    transform: rotateY(180deg);
 }
