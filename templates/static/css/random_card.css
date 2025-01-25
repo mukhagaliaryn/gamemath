@@ -1,0 +1,31 @@
+#player {
+    position: absolute;
+    width: 84px;
+    height: 84px;
+    top: 10px;
+    left: 10px;
+    transition: top 0.1s ease, left 0.1s ease;
+}
+
+#player img {
+    object-fit: contain;
+    animation: player-bounce 1s infinite;
+}
+
+@keyframes player-bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.highlight {
+    transform: scale(1.2);
+    cursor: pointer;
+    transition: all .3s;
+}
