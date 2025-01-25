@@ -16,7 +16,8 @@
     {% else %}
         <div class="grid gap-4 max-w-lg w-full text-center">
             <img src="{% if item.quiz.poster %}{{ item.quiz.poster.url }}{% else %}{% static 'images/poster.png' %}{% endif %}" class="w-64 mx-auto rounded-lg" alt="">
-            <h1 class="text-4xl font-bold">"{{ quiz_control.quiz.title }}" ойынын бастау</h1>
+            <h1 class="text-4xl font-bold">"{{ quiz_control.quiz.title }}" тесті</h1>
+            <span class="font-bold">{{ quiz_control.quiz.interface.name }} ойыны</span>
             <form method="post" action="" class="grid gap-2 px-8">
                 {% csrf_token %}
                 <input 

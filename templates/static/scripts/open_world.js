@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const timerElement = document.getElementById('timer');
 
     let userAnswers = [];
-    const timerDuration = 300; // 5 минут (секундпен)
+    const timerDuration = 5 * 60; // 5 минут (секундпен)
 
     try {
         const data = await loadQuiz(quizId, sessionId); 
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const timer = createTimer({
                 duration: timerDuration,
                 onTick: (remaining) => {
-                    timerElement.textContent = formatTime(remaining); // Таймер уақытын жаңарту
+                    timerElement.textContent = `Қалған уақыт: ${formatTime(remaining)}`; // Таймер уақытын жаңарту
                 },
                 onFinish: async () => {
                     alert('Уақыт аяқталды! Тест автоматты түрде аяқталады.');
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 // Сұраққа сурет қосу
                 const img = document.createElement('img');
-                img.src = '/static/images/sunduk.png'; // Сурет URL
+                img.src = '/static/games/open_world/sunduk.png'; // Сурет URL
                 img.alt = `Сұрақ ${index + 1}`;
                 img.className = 'w-10';
 

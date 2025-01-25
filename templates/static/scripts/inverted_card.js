@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const timer = createTimer({
                 duration: timerDuration,
                 onTick: (remaining) => {
-                    timerElement.textContent = formatTime(remaining); // Таймер уақытын жаңарту
+                    timerElement.textContent = `Қалған уақыт: ${formatTime(remaining)}`; // Таймер уақытын жаңарту
                 },
                 onFinish: async () => {
                     alert('Уақыт аяқталды! Тест автоматты түрде аяқталады.');
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const img = document.createElement('img');
                 img.src = '/static/games/invented_card/request.png'; // Сурет URL
                 img.alt = `Сұрақ ${index + 1}`;
-                img.className = 'w-10';
+                img.className = 'w-24';
 
                 questionElement.appendChild(img);
                 quizContainer.appendChild(questionElement); // Контейнерге қосу

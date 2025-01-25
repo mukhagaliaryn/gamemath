@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     // Таймердің экрандағы мәнін жаңарту
                     const minutes = Math.floor(remainingTime / 60);
                     const seconds = remainingTime % 60;
-                    timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    timerElement.textContent = `Қалған уақыт: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 },
                 onFinish: async () => {
                     // Таймер аяқталған кезде

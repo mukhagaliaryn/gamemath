@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const timerElement = document.getElementById('timer');
 
     let userAnswers = [];
-    const timerDuration = 3 * 60; // 3 минут (секундпен)
+    const timerDuration = 5 * 60; // 3 минут (секундпен)
 
     try {
         const data = await loadQuiz(quizId, sessionId); 
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const timer = createTimer({
                 duration: timerDuration,
                 onTick: (remaining) => {
-                    timerElement.textContent = formatTime(remaining); // Таймер уақытын жаңарту
+                    timerElement.textContent = `Қалған уақыт: ${formatTime(remaining)}`; // Таймер уақытын жаңарту
                 },
                 onFinish: async () => {
                     alert('Уақыт аяқталды! Тест автоматты түрде аяқталады.');
