@@ -30,6 +30,8 @@ class QuizControl(models.Model):
     date_finished = models.DateTimeField(_('Аяқталған уақыт'), blank=True, null=True)
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
         if not self.qr_code:
             qr = qrcode.QRCode(
                 version=1,
@@ -45,9 +47,9 @@ class QuizControl(models.Model):
             buffer = BytesIO()
             img.save(buffer, format="PNG")
             buffer.seek(0)
-            self.qr_code.save(f'qr_code_{self.id}.png', ContentFile(buffer.read()), save=False)
+            self.qr_code.save(f'qr_code_{self.pk}.png', ContentFile(buffer.read()), save=False)
+            super().save(update_fields=["qr_code"])
 
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return 'Тест бақылау: {} - {}'.format(self.user, self.quiz)
