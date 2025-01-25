@@ -1,66 +1,3 @@
-// Player объектісін қозғалту
-// ------------------------------------------------------------------------------------------------
-const player = document.getElementById('player');
-let positionX = 0;
-let positionY = 0;
-
-
-document.addEventListener('keydown', (event) => {
-    const stepSound = document.getElementById('step-sound');
-    const chests = document.querySelectorAll('.question'); 
-
-    const step = 50; // Қозғалыс қадамы (пиксель)
-    switch(event.key) {
-        case 'ArrowUp':
-            positionY -= step;
-            break;
-        case 'ArrowDown':
-            positionY += step;
-            break;
-        case 'ArrowLeft':
-            positionX -= step;
-            break;
-        case 'ArrowRight':
-            positionX += step;
-            break;
-    }
-
-    // Объектіні шекарадан шығармау
-    const container = document.documentElement; // Шекараны html элементі ретінде аламыз
-    const maxWidth = container.clientWidth - player.offsetWidth;
-    const maxHeight = container.clientHeight - player.offsetHeight;
-    positionX = Math.max(0, Math.min(positionX, maxWidth));
-    positionY = Math.max(0, Math.min(positionY, maxHeight));
-    player.style.transform = `translate(${positionX}px, ${positionY}px)`;
-
- 
-    // Қадам
-    stepSound.currentTime = 0;
-    stepSound.play();
-
-    // Сандықтарға жақындауды тексеру
-    chests.forEach((chest) => {
-        const rect1 = player.getBoundingClientRect();
-        const rect2 = chest.getBoundingClientRect();
-
-        // Жақындықты тексеру
-        if (
-            rect1.left < rect2.right &&
-            rect1.right > rect2.left &&
-            rect1.top < rect2.bottom &&
-            rect1.bottom > rect2.top
-        ) {
-            // Жақын болған кезде highlight класын қосу
-            chest.classList.add('highlight');
-        } else {
-            // Алыс болған кезде highlight класын алып тастау
-            chest.classList.remove('highlight');
-        }
-    });
-});
-
-
-
 // Деректерді жүктеу
 // -------------------------------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {
@@ -69,7 +6,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const sessionId = document.getElementById('session-id').value; 
     const csrfToken = document.getElementById('csrf-token').value; 
 
-    const player = document.getElementById('player'); 
     const modal = document.getElementById('modal');
     const modalContent = document.getElementById('modal-content');
     const submitButton = document.getElementById('submit-answers');
@@ -99,10 +35,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             data.questions.forEach((question, index) => {
                 // Сұрақ элементін жасау
                 const questionElement = document.createElement('div');
-                questionElement.className = 'question cursor-pointer w-64 h-64 flex justify-center items-center bg-green-400 rounded-xl transition-all';
+                questionElement.className = 'question cursor-pointer w-64 h-64 flex justify-center items-center bg-green-400 rounded-xl transition-all hover:scale-110';
 
                 const img = document.createElement('img');
-                img.src = '/static/images/sunduk.png'; // Сурет URL
+                img.src = '/static/games/invented_card/request.png'; // Сурет URL
                 img.alt = `Сұрақ ${index + 1}`;
                 img.className = 'w-10';
 
@@ -118,23 +54,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Тыңдаушы: тышқанды басу
             document.addEventListener('click', (event) => {
-                const playerRect = player.getBoundingClientRect();
                 questions.forEach(({ element, data }) => {
                     const questionRect = element.getBoundingClientRect();
 
-                    // Жақын ма және тышқан элементке бағытталған ба
-                    if (
-                        playerRect.left < questionRect.right &&
-                        playerRect.right > questionRect.left &&
-                        playerRect.top < questionRect.bottom &&
-                        playerRect.bottom > questionRect.top &&
-                        event.target === element.querySelector('img')
-                    ) {
-                        // Жақын және тышқанмен басылған кезде модалды ашу
+                    // Тышқан элементке бағытталған ба
+                    if (event.target === element.querySelector('img')) {
+                        // Модалды ашу
                         const chestSound = document.getElementById('chest-sound');
                         chestSound.currentTime = 0;
                         chestSound.play();
-                        element.firstChild.src = '/static/images/open-sunduk.png';
+                        element.firstChild.src = '/static/games/invented_card/check.png';
 
                         const savedAnswer = userAnswers.find(answer => answer.question_id === data.id);
                         const savedOptionIds = savedAnswer ? savedAnswer.selected_option_ids : [];
