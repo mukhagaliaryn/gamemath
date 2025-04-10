@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     let selectedMagicOption = null;
     let currentMagicQuestionIndex = 0;
     let currentQuestionIndex = 0;
-    let gameState = "find_magic_number"; 
+    let gameState = "find_magic_number";
+    let timer = null; // Таймерді сақтау үшін
 
     const quizData = await loadQuiz(quizId, sessionId);
     if (!quizData) {
@@ -57,11 +58,29 @@ document.addEventListener('DOMContentLoaded', async function () {
     const questionBody = document.getElementById('question-body');
     const optionsContainer = document.getElementById('options');
     const submitBtn = document.getElementById('submit-btn');
-    
+    const timerElement = document.getElementById('timer');
+
+    // Таймер бастау
+    function startGameTimer() {
+        timer = createTimer({
+            duration: 300, // 5 минут = 300 секунд
+            onTick: (seconds) => {
+                timerElement.innerText = formatTime(seconds);
+                // Егер 30 секундтан аз қалса қызартып көрсету
+                if (seconds <= 30) {
+                    timerElement.classList.add('text-red-500');
+                }
+            },
+            onFinish: async () => {
+                await finishGame();
+            }
+        });
+    }
+
     // Ғажайып санды көрсету
     function renderMagicNumber() {
-        numberContainer.style.display = "grid";  // Ғажайып санды көрсету
-        quizContainer.style.display = "none";     // Тест сұрақты жасыру
+        numberContainer.style.display = "grid";
+        quizContainer.style.display = "none";
 
         const magicQuestion = magicQuestions[currentMagicQuestionIndex];
         numberQuestion.innerText = `${currentMagicQuestionIndex + 1}. ${magicQuestion.question}`;
@@ -78,7 +97,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 Array.from(numberOptions.children).forEach(b => b.classList.remove('bg-green-500'));
                 btn.classList.add('bg-green-500');
                 numberSubmitBtn.disabled = false;
-                playAudio('click-audio')
+                playAudio('click-audio');
             };
             numberOptions.appendChild(btn);
         });
@@ -86,7 +105,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     numberSubmitBtn.addEventListener('click', function () {
         const magicQuestion = magicQuestions[currentMagicQuestionIndex];
-
         if (selectedMagicOption === magicQuestion.correct) {
             alert("🎯 Дұрыс! Енді сұраққа жауап беріңіз.");
             gameState = "answer_question";
@@ -98,8 +116,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Нақты тест сұрақты көрсету
     function renderQuestion() {
-        numberContainer.style.display = "none";  // Ғажайып санды жасыру
-        quizContainer.style.display = "grid";   // Тест сұрақты көрсету
+        numberContainer.style.display = "none";
+        quizContainer.style.display = "grid";
 
         const question = questions[currentQuestionIndex];
         questionBody.innerHTML = `
@@ -128,7 +146,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 Array.from(optionsContainer.children).forEach(b => b.classList.remove("bg-green-500"));
                 btn.classList.add("bg-green-500");
                 submitBtn.disabled = false;
-                playAudio('click-audio')
+                playAudio('click-audio');
             };
             optionsContainer.appendChild(btn);
         });
@@ -146,19 +164,31 @@ document.addEventListener('DOMContentLoaded', async function () {
         currentMagicQuestionIndex++;
 
         if (currentQuestionIndex < questions.length) {
-            // Келесі сұраққа көшу
             gameState = "find_magic_number";
             renderMagicNumber();
         } else {
-            // Барлық сұрақ аяқталды
-            await submitQuiz(quizId, sessionId, userAnswers, csrfToken);
-            playAudio('finish-audio')
-            const gameContainer = document.getElementById('game-container');
-            gameContainer.innerHTML = "<h1 class='finish-message'>🎉 Ойын аяқталды! Жарайсың!</h1>";
-            location.href = `/user/quiz/${userQuizId}/`;
+            await finishGame();
         }
     });
 
+    async function finishGame() {
+        if (timer) {
+            timer.stop(); // Таймерді тоқтатамыз
+        }
+        await submitQuiz(quizId, sessionId, userAnswers, csrfToken);
+        playAudio('finish-audio');
+        const gameContainer = document.getElementById('game-container');
+        gameContainer.innerHTML = "<h1 class='finish-message'>🎉 Ойын аяқталды! Жарайсың!</h1>";
+        location.href = `/user/quiz/${userQuizId}/`;
+    }
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
     // Ойынды бастау
+    startGameTimer();
     renderMagicNumber();
 });
