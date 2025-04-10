@@ -1,0 +1,35 @@
+{% extends 'layouts/games.html' %}
+{% load static %}
+
+
+{% block title %}
+{{ quiz_control.quiz.title }} | GameMath
+{% endblock title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/maze_math.css' %}">
+{% endblock extra_css %}
+
+
+{% block game_content %}
+<div class="w-full h-full flex justify-center items-center">
+    <div id="question-modal" class="hidden fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white text-black p-6 rounded-lg w-80 shadow-lg">
+            <div id="question-text" class="text-lg font-bold mb-4 text-center"></div>
+            <div id="options-container" class="flex flex-col space-y-2"></div>
+        </div>
+    </div>
+
+    <div>
+        <div class="question-panel"></div>
+
+        <div class="maze" id="maze"></div>
+    </div>
+</div>
+{% endblock game_content %}
+
+
+{% block extra_js %}
+    <script src="{% static 'scripts/games.js' %}"></script>
+    <script src="{% static 'scripts/maze_math.js' %}"></script>
+{% endblock extra_js %}
