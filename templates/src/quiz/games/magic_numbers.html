@@ -1,0 +1,52 @@
+{% extends 'layouts/games.html' %}
+{% load static %}
+
+
+{% block title %}
+    {{ quiz_control.quiz.title }} | GameMath
+{% endblock title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/magic_numbers.css' %}">
+{% endblock extra_css %}
+
+
+{% block game_content %}
+    <div id="game-container" class="h-full flex justify-center items-center">
+        <div id="number-container" class="max-w-screen-xl w-full gap-4">
+            <div id="number-question" class="text-4xl text-center font-semibold"></div>
+            <div id="number-options" class="grid grid-cols-4 gap-4"></div>
+            <button 
+                id="number-submit-btn" 
+                class="w-64 mx-auto py-4 px-8 font-semibold bg-orange-500 text-white rounded-lg transition-all hover:bg-orange-600 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-orange-500" 
+                disabled
+            >
+                Жауапты жіберу
+            </button>
+        </div>
+        
+        <div id="quiz-container" class="max-w-screen-xl w-full gap-4">
+            <div id="question-body"></div>
+            <div id="options" class="grid grid-cols-2 gap-4"></div>
+            <button
+                id="submit-btn" 
+                class="w-64 mx-auto py-4 px-8 font-semibold bg-orange-500 text-white rounded-lg transition-all hover:bg-orange-600 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-orange-500" 
+                disabled
+            >
+                Жауапты жіберу
+            </button>
+        </div>
+
+        <div id="timer" class="mt-4 text-lg"></div>
+    </div>
+
+    <!-- Аудиофайлы -->
+    <audio id="click-audio" src="{% static 'audio/option_click-1.wav' %}"></audio>
+    <audio id="next-audio" src="{% static 'audio/option_click-2.wav' %}"></audio>
+    <audio id="finish-audio" src="{% static 'audio/finish.mp3' %}"></audio>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'scripts/games.js' %}"></script>
+    <script src="{% static 'scripts/magic_numbers.js' %}"></script>
+{% endblock extra_js %}

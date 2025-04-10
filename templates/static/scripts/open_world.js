@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const chestSound = document.getElementById('chest-sound');
                         chestSound.currentTime = 0;
                         chestSound.play();
-                        element.firstChild.src = '/static/images/open-sunduk.png';
+                        element.firstChild.src = '/static/games/open_world/open-sunduk.png';
 
                         const savedAnswer = userAnswers.find(answer => answer.question_id === data.id);
                         const savedOptionIds = savedAnswer ? savedAnswer.selected_option_ids : [];
