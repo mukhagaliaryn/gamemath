@@ -39,6 +39,23 @@
     font-size: 20px;
 }
 
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-finish {
+    animation: pulse 1.5s infinite; /* 1.5 секунд сайын қайталанады */
+}
+
+
 .hidden {
     display: none;
 }

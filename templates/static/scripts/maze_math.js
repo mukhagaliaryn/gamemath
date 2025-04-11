@@ -5,34 +5,34 @@ document.addEventListener('DOMContentLoaded', async function () {
     const csrfToken = document.getElementById('csrf-token').value;
 
     const mazeLayout = [
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,0,0,0,1,0,1,0,0,0,1,0,0,1,0,1,0,0,0,1],
-        [1,1,1,0,1,0,1,1,1,0,1,0,1,1,0,1,1,1,0,1],
-        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1],
-        [1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,0,1],
-        [1,0,1,0,0,0,1,0,0,0,0,0,1,0,0,1,0,1,0,1],
-        [1,0,1,0,1,0,1,1,1,1,1,0,1,1,0,1,0,1,0,1],
-        [1,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,1,0,1],
-        [1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,0,1,0,1],
-        [1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,1],
-        [1,0,1,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,1,1],
-        [1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
-        [1,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1],
-        [1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,1],
-        [1,0,1,1,1,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1],
-        [1,0,1,0,0,1,0,1,0,1,0,1,0,1,0,0,0,1,0,1],
-        [1,0,1,0,1,1,0,1,0,1,0,1,0,1,0,1,1,1,0,1],
-        [1,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1],
-        [1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1],
+        [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+        [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1],
+        [1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1],
+        [1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+        [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+        [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1],
+        [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+        [1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+        [1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
+        [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1],
+        [1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     ];
 
     let playerPosition = { row: 1, col: 1 };
     let questions = [];
-    let questionPositions = {}; // {'row-col': question}
-    let finishVisible = false; // Finish (🏁) басында жасырылған
+    let questionPositions = {};
+    let finishVisible = false;
+    let answers = []; // ✅ жауаптарды жинайтын массив
 
-    // Maze салу
     function createMaze() {
         const maze = document.getElementById('maze');
         maze.innerHTML = '';
@@ -52,10 +52,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                     cell.classList.add('player');
                     cell.innerHTML = '<img src="/static/games/maze_math/player.png">';
                 } else if (r === 18 && c === 18 && finishVisible) {
-                    cell.classList.add('finish');
+                    cell.classList.add('finish', 'animate-finish');
                     cell.innerHTML = '<img src="/static/games/maze_math/door.png">';
                 } else if (questionPositions[cellKey]) {
-                    // сұрақ бар жер ❓
                     cell.innerHTML = '<span style="font-size: 20px;">❓</span>';
                 }
 
@@ -64,7 +63,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    // Ойыншыны жылжыту
     async function movePlayer(dr, dc) {
         const newRow = playerPosition.row + dr;
         const newCol = playerPosition.col + dc;
@@ -73,13 +71,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (mazeLayout[newRow][newCol] === 0) {
                 const cellKey = `${newRow}-${newCol}`;
                 if (questionPositions[cellKey]) {
-                    openQuestionModal(questionPositions[cellKey], (isCorrect) => {
+                    openQuestionModal(questionPositions[cellKey], (isCorrect, selectedOption) => {
                         if (isCorrect) {
+                            // ✅ Дұрыс жауап бергенде дұрыс форматта сақтау
+                            playAudio("finish-audio");
+                            answers.push({
+                                question_id: questionPositions[cellKey].id,
+                                selected_option_ids: [selectedOption.id]  // ✅ Массив ретінде
+                            });
+
                             delete questionPositions[cellKey];
                             playerPosition.row = newRow;
                             playerPosition.col = newCol;
-
-                            // Барлық сұрақ шешілсе — Finish көрсету
+                            playAudio('step-sound');
+                            
                             if (Object.keys(questionPositions).length === 0) {
                                 finishVisible = true;
                             }
@@ -92,13 +97,23 @@ document.addEventListener('DOMContentLoaded', async function () {
                 } else {
                     playerPosition.row = newRow;
                     playerPosition.col = newCol;
+                    playAudio('step-sound');
 
-                    // Finish-қа жетті ме?
                     if (finishVisible && newRow === 18 && newCol === 18) {
-                        await window.submitQuiz(quizId, sessionId, [], csrfToken);
-                        alert('Құттықтаймыз! Сіз лабиринттен өттіңіз! 🎉');
-                        window.location.href = `/user/quiz/${userQuizId}/`;
+                        // ✅ Finish-ке жетті — жауаптарды жібереміз
+                        const response = await window.submitQuiz(quizId, sessionId, answers, csrfToken);
+                        if (response && response.status === "success") {
+                            playAudio("finish-audio");
+                            alert('🎉 Құттықтаймыз!')
+                            window.location.href = `/user/quiz/${userQuizId}/`;
+                        } else {
+                            alert('Қате: жауаптар жіберілмеді.');
+                        }
                         return;
+                    }
+
+                    if (isNearQuestion(newRow, newCol)) {
+                        playAudio('chest-sound');
                     }
 
                     createMaze();
@@ -107,7 +122,24 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    // Сұрақтарға бос клеткаларды Random тарату
+    function isNearFinish(row, col) {
+        return Math.abs(row - 18) <= 1 && Math.abs(col - 18) <= 1;
+    }
+
+    function isNearQuestion(row, col) {
+        for (let dr = -1; dr <= 1; dr++) {
+            for (let dc = -1; dc <= 1; dc++) {
+                const r = row + dr;
+                const c = col + dc;
+                const key = `${r}-${c}`;
+                if (questionPositions[key]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     function assignQuestionsToMaze() {
         const freeCells = [];
         for (let r = 0; r < mazeLayout.length; r++) {
@@ -126,7 +158,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    // Quiz сұрақтарын серверден жүктеу
     async function initializeMaze() {
         const data = await window.loadQuiz(quizId, sessionId);
         if (!data) {
@@ -138,7 +169,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         createMaze();
     }
 
-    // Modal ашу
     function openQuestionModal(question, onAnswer) {
         const modal = document.getElementById('question-modal');
         const questionText = document.getElementById('question-text');
@@ -146,14 +176,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         questionText.innerHTML = question.question_body;
         optionsContainer.innerHTML = '';
-        
 
         question.options.forEach((option, index) => {
             const button = document.createElement('button');
             button.innerHTML = option.option_body;
-            button.className = 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600';
+            button.className = 'text-black p-2 rounded-lg border';
             button.onclick = () => {
-                onAnswer(option.is_correct);
+                onAnswer(option.is_correct, option); // ✅ Option объектісін де қайтарып береміз
                 modal.classList.add('hidden');
             };
             optionsContainer.appendChild(button);
@@ -162,7 +191,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         modal.classList.remove('hidden');
     }
 
-    // Пернетақта басқаруы
+    document.getElementById('close-modal').addEventListener('click', function() {
+        document.getElementById('question-modal').classList.add('hidden');
+    });
+
     document.addEventListener('keydown', function (event) {
         if (event.key === 'ArrowUp') movePlayer(-1, 0);
         if (event.key === 'ArrowDown') movePlayer(1, 0);
@@ -170,12 +202,32 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (event.key === 'ArrowRight') movePlayer(0, 1);
     });
 
-    // Ойын басталғанда бәрін жүктейміз
+
+
     await initializeMaze();
 });
 
 
 
-
-
-
+// const mazeLayout = [
+//     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+//     [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1],
+//     [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1],
+//     [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+//     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1],
+//     [1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1],
+//     [1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1],
+//     [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+//     [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+//     [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+//     [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1],
+//     [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+//     [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+//     [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+//     [1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+//     [1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
+//     [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1],
+//     [1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+//     [1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+//     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+// ];
