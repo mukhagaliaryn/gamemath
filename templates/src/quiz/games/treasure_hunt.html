@@ -1,0 +1,73 @@
+{% extends 'layouts/games.html' %}
+{% load static %}
+
+
+{% block title %}
+{{ quiz_control.quiz.title }} | GameMath
+{% endblock title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/treasure_hunt.css' %}">
+{% endblock extra_css %}
+
+
+{% block game_content %}
+<div class="w-full h-full flex justify-center items-center">
+    <!-- Instruction -->
+    <div class="absolute top-5 left-5 bg-white p-4 rounded-lg">
+        <div class="text-gray-900 text-sm flex gap-2 items-center">
+            <svg class="w-4 h-4 bg-orange-500 text-white rounded" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
+            </svg>
+            <svg class="w-4 h-4 bg-orange-500 text-white rounded" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+            </svg>
+            <svg class="w-4 h-4 bg-orange-500 text-white rounded" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 15 7-7 7 7"/>
+            </svg>
+            <svg class="w-4 h-4 bg-orange-500 text-white rounded" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+            </svg>
+        </div>
+        <div class="flex items-center gap-2 text-sm mt-2">
+            <div class="w-5 h-6 rounded-lg bg-orange-500 flex items-center justify-center">
+                !
+            </div>
+            <span class="text-gray-900">Сұраққа жақындау</span>
+        </div>
+    </div>
+
+    <div id="question-modal" class="hidden fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white p-6 rounded-lg max-w-2xl w-full shadow-lg relative">
+            <!-- Жабу батырмасы -->
+            <button id="close-modal" class="absolute top-2 right-4 text-gray-500 hover:text-black text-2xl">&times;</button>
+    
+            <!-- Сұрақ мәтіні -->
+            <div id="question-text" class="text-xl font-bold mb-4 text-black text-center"></div>
+    
+            <!-- Опциялар -->
+            <div id="options-container" class="grid gap-4 grid-cols-2"></div>
+        </div>
+    </div>
+
+    <div id="lives" class="absolute top-5 right-5 text-2xl text-white p-4 rounded-lg bg-white">
+        ❤️❤️❤️
+    </div>
+
+    <div>
+        <div class="question-panel"></div>
+        <div class="maze" id="maze"></div>
+    </div>
+</div>
+
+<audio id="click-audio" src="{% static 'audio/option_click-1.wav' %}"></audio>
+<audio id="step-sound" src="{% static 'audio/step.mp3' %}"></audio>
+<audio id="chest-sound" src="{% static 'audio/chest-open.mp3' %}"></audio>
+<audio id="finish-audio" src="{% static 'audio/finish.mp3' %}"></audio>
+{% endblock game_content %}
+
+
+{% block extra_js %}
+    <script src="{% static 'scripts/games.js' %}"></script>
+    <script src="{% static 'scripts/treasure_hunt.js' %}"></script>
+{% endblock extra_js %}
