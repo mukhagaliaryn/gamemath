@@ -1,0 +1,60 @@
+{% extends 'layouts/games.html' %}
+{% load static %}
+
+{% block title %}
+    {{ quiz_control.quiz.title }} | GameMath
+{% endblock title %}
+
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/geomety_quest.css' %}">
+{% endblock extra_css %}
+
+
+{% block game_content %}
+    <div class="w-full max-w-4xl mx-auto my-20">
+        <!-- Player Info Panel -->
+        <div class="flex justify-between mb-6 w-full text-lg bg-gray-800 p-4 rounded-xl">
+            <div>👤 {{ user_quiz.username }} — <span id="player-score">0</span> ұпай</div>
+            <div>🤖 Bot — <span id="bot-score">0</span> ұпай</div>
+            <div>Раунд: <span id="round">1</span></div>
+        </div>
+        
+        <!-- Step 1: Figure Identification -->
+        <div id="figure-step" class="bg-gray-800 p-6 rounded-xl w-full mb-6 shadow-xl">
+            <div class="text-xl font-semibold mb-4" id="figure-question">Фигураны таңдаңыз: Барлық қабырғалары тең және
+                бұрыштары 90°</div>
+        
+            <div id="figure-options" class="grid gap-4">
+                <button class="bg-gray-700 hover:bg-blue-600 p-3 rounded" data-value="circle">⭕ Шеңбер</button>
+                <button class="bg-gray-700 hover:bg-blue-600 p-3 rounded" data-value="triangle">🔺 Үшбұрыш</button>
+                <button class="bg-gray-700 hover:bg-blue-600 p-3 rounded" data-value="square">◼ Шаршы</button>
+                <button class="bg-gray-700 hover:bg-blue-600 p-3 rounded" data-value="trapezoid">🔻 Трапеция</button>
+            </div>
+        
+            <div id="figure-feedback" class="mt-4 text-lg font-semibold h-6"></div>
+        </div>
+        
+        <!-- Step 2: Quiz Question (initially hidden) -->
+        <div id="quiz-step" class="hidden bg-gray-800 p-6 rounded-xl w-full mb-6 shadow-xl">
+            <div class="text-xl font-semibold mb-4" id="question-text">Тест сұрағы жүктелуде...</div>
+        
+            <div id="options" class="grid gap-4">
+                <!-- Нұсқалар JS арқылы келетін болады -->
+            </div>
+        
+            <button id="submit-answer"
+                class="mt-6 bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded text-white font-semibold transition duration-150 ease-in-out">Жіберу</button>
+            <div id="feedback" class="mt-4 text-lg font-semibold h-6"></div>
+        </div>
+        
+        <!-- Final Message -->
+        <div id="final-message" class="text-2xl font-bold text-green-400 hidden mt-10 text-center"></div>
+    </div>
+{% endblock game_content %}
+
+
+{% block extra_js %}
+    <script src="{% static 'scripts/games.js' %}"></script>
+    <script src="{% static 'scripts/geometry_quest.js' %}"></script>
+{% endblock extra_js %}
