@@ -1,0 +1,30 @@
+{% extends 'layouts/games.html' %}
+{% load static %}
+
+{% block title %}
+    {{ quiz_control.quiz.title }} | GameMath
+{% endblock title %}
+
+
+{% block game_content %}
+<div class="max-w-4xl w-full mx-auto my-12 text-center text-white">
+    <!-- 2. График тапсырмасы -->
+    <div id="graph-challenge">
+        <h1 class="text-4xl font-bold mb-6">⚙️ Function Frenzy</h1>
+        <h2 id="graph-prompt" class="text-2xl font-semibold mb-6"></h2>
+        <div id="graph-options" class="flex justify-center flex-wrap gap-6"></div>
+    </div>
+
+    <!-- 3. Тест сұрағы -->
+    <div id="quiz-section" class="hidden">
+        <div id="quiz-container" class="space-y-4"></div>
+    </div>
+
+</div>
+{% endblock game_content %}
+
+
+{% block extra_js %}
+    <script src="{% static 'scripts/games.js' %}"></script>
+    <script src="{% static 'scripts/function_frenzy.js' %}"></script>
+{% endblock extra_js %}
