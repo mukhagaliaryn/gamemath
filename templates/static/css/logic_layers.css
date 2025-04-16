@@ -1,0 +1,80 @@
+.layer {
+    width: 90%;
+    max-width: 600px;
+    border: 3px solid #ddd;
+    border-radius: 16px;
+    padding: 1.5rem;
+    background: white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    opacity: 0.5;
+    pointer-events: none;
+    transform: scale(0.95);
+    transition: all 0.4s ease;
+}
+
+.layer.locked {
+    filter: blur(2px);
+}
+
+.layer:not(.locked) {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+    filter: none;
+}
+
+.option-btn {
+    padding: 12px;
+    background: #1aa8cc;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.option-btn:hover {
+    background: #115d70;
+}
+
+.option-btn.correct {
+    background: #4CAF50;
+    color: white;
+}
+
+.option-btn.wrong {
+    background: #f44336;
+    color: white;
+}
+
+/* Анимациялар */
+@keyframes slide-up {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-up {
+    animation: slide-up 0.5s ease-out;
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.animate-pop {
+    animation: pop 0.4s ease-out;
+}

@@ -1,0 +1,24 @@
+{% extends 'layouts/games.html' %}
+{% load static %}
+
+
+{% block title %}
+{{ quiz_control.quiz.title }} | GameMath
+{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/logic_layers.css' %}">
+{% endblock extra_css %}
+
+
+{% block game_content %}
+<div id="layers-container" class="flex flex-col items-center gap-10 py-10 h-screen overflow-y-auto">
+    <!-- Қабаттар JS арқылы динамикалық құрылады -->
+</div>
+{% endblock game_content %}
+
+
+{% block extra_js %}
+<script src="{% static 'scripts/games.js' %}"></script>
+<script src="{% static 'scripts/logic_layers.js' %}"></script>
+{% endblock extra_js %}
